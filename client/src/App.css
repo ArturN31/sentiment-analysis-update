@@ -1,0 +1,156 @@
+/* TEMPLATE */
+html,
+p,
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: 'Heebo', sans-serif !important;
+}
+
+h1 {
+	font-size: 32px !important;
+	font-weight: 300 !important;
+}
+
+p {
+	font-size: 16px !important;
+	font-weight: 300 !important;
+}
+
+.container-fluid {
+	position: absolute;
+	height: 40vh;
+	left: 0px;
+
+	background: linear-gradient(180deg, #ff0f7b 31.98%, #f89b29 100%);
+}
+
+.navbar-light {
+	background-color: #ff0f7b !important;
+}
+
+.nav-link {
+	padding: 5px !important;
+	width: fit-content;
+	float: right;
+
+	color: #ffff !important;
+}
+
+.nav-link:hover {
+	color: #c4c4c4 !important;
+}
+
+@media only screen and (min-width: 992px) {
+	.nav-link {
+		margin-inline: 5px;
+	}
+}
+
+.active-link {
+	border: 1px solid #ffff;
+}
+
+.navbar-toggler {
+	border: 1px solid #000 !important;
+	filter: grayscale(1) invert(1);
+}
+
+.btn-submit,
+.btn-reset {
+	padding: 10px 20px 10px 20px !important;
+}
+
+.btn-submit {
+	background-color: #0275d8 !important;
+}
+
+.btn-reset {
+	background-color: #ff0f7b !important;
+}
+
+.btn-select {
+	background-color: #0275d8 !important;
+}
+
+#dropdown-themes {
+	width: 100%;
+}
+
+.dropdown-menu {
+	height: 15rem;
+	overflow-y: scroll;
+}
+
+.user-input-div {
+	padding: 35px 65px 35px 65px;
+	border-radius: 39px;
+
+	background-color: #ffff;
+	box-shadow: 0px 4px 30px 10px rgba(0, 0, 0, 0.2);
+}
+/* EOF TEMPLATE */
+
+/* EMOTION COMPONENTS */
+.emotion-div {
+	padding: 35px 65px 35px 65px;
+	border-radius: 34px;
+	box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.25);
+}
+
+/* EOF EMOTION COMPONENTS */
+
+/* ACCORDION */
+.accordion-header {
+	border: 2px solid #000 !important;
+	border-radius: 23px;
+}
+
+.accordion-item,
+.accordion-button {
+	border-radius: 23px !important;
+}
+/* EOF ACCORDION */
+
+/* REACT MAP */
+#map {
+	width: 100px;
+}
+
+.leaflet-popup,
+.leaflet-popup-content {
+	min-width: 340px;
+}
+
+.tooltip-text {
+	text-align: justify;
+	text-align-last: center;
+}
+
+.map-tooltip {
+	color: #ffff;
+	letter-spacing: 2px;
+}
+
+.anger-map-tooltip {
+	background: linear-gradient(180deg, #d3321d 26.32%, #ffcf67 100%);
+}
+
+.fear-map-tooltip {
+	background: linear-gradient(180deg, #3d05dd 26.32%, #fcb0f3 100%);
+}
+
+.joy-map-tooltip {
+	background: linear-gradient(180deg, #ff930f 26.32%, #fff95b 100%);
+}
+
+.neutral-map-tooltip {
+	background: linear-gradient(180deg, #32c4c0 26.32%, #8de9d5 100%);
+}
+
+.sadness-map-tooltip {
+	background: linear-gradient(180deg, #103783 26.32%, #9bafd9 100%);
+}
+/* EOF REACT MAP */
