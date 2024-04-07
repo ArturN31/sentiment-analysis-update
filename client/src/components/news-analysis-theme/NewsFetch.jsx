@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-// import NewsDisplay from './NewsDisplay';
+import NewsDisplay from './NewsDisplay';
 
 const NewsFetch = (params) => {
+	const { handleMaxCountChange } = params;
 	const { theme, count } = params.params;
 	const [news, setNews] = useState([]);
 
@@ -53,6 +54,11 @@ const NewsFetch = (params) => {
 		}
 	}, [theme]);
 
+	useEffect(() => {
+		handleMaxCountChange(news.length);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [news]);
+
 	console.log(news);
 	//todo: add news display
 
@@ -65,12 +71,12 @@ const NewsFetch = (params) => {
 			</Row>
 			<Row>
 				<Col>
-					{/* {news.slice(0, count).map((n) => (
+					{news.slice(0, count).map((n) => (
 						<NewsDisplay
 							url={n}
-							key={n.url}
+							key={n.title}
 						/>
-					))} */}
+					))}
 				</Col>
 			</Row>
 		</>

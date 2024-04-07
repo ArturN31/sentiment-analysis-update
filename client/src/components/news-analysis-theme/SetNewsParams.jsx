@@ -36,6 +36,7 @@ function SetNewsParams() {
 	const [params, setParams] = useState({
 		theme: 'home',
 		count: 1,
+		maxCount: 1,
 	});
 
 	const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,6 +51,11 @@ function SetNewsParams() {
 	const handleCountChange = (e) => {
 		setParams({ ...params, count: e.target.value });
 		setIsSubmitted(false);
+	};
+
+	// sets params for count
+	const handleMaxCountChange = (passedMaxCount) => {
+		setParams({ ...params, maxCount: passedMaxCount });
 	};
 
 	const handleSubmit = () => {
@@ -99,7 +105,7 @@ function SetNewsParams() {
 									type='number'
 									onChange={handleCountChange}
 									min='0'
-									max='10'
+									max={params.maxCount}
 									value={params.count}
 								/>
 							</Form.Group>
@@ -139,7 +145,14 @@ function SetNewsParams() {
 						</Col>
 					</Row>
 				</Form>
-				{isSubmitted ? <NewsFetch params={params} /> : ''}
+				{isSubmitted ? (
+					<NewsFetch
+						params={params}
+						handleMaxCountChange={handleMaxCountChange}
+					/>
+				) : (
+					''
+				)}
 			</Col>
 		</Row>
 	);
