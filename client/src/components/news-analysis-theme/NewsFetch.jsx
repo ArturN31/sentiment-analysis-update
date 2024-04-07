@@ -73,7 +73,7 @@ const NewsFetch = (params) => {
 				<Col>
 					{news.slice(0, count).map((n) => (
 						<NewsDisplay
-							url={n}
+							newsData={n}
 							key={n.title}
 						/>
 					))}

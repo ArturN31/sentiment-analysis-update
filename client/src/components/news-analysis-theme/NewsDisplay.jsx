@@ -1,13 +1,25 @@
 /* eslint-disable react/prop-types */
 
+import { useEffect } from 'react';
 import { Row, Col, Card, Accordion, ListGroup } from 'react-bootstrap';
 //import NewsSentiment from './NewsSentiment';
 
 const NewsDisplay = (props) => {
-	const { url } = props;
-	const { title, published_date, multimedia } = url;
+	const { newsData } = props;
+	const { title, published_date, multimedia, url } = newsData;
 
 	//todo: scrape news data from urls and add it to output
+	useEffect(() => {
+		const apiURL = 'http://localhost:3001/api/scrapeArticleData';
+		const postNewsURLtoAPI = async () => {
+			await fetch(apiURL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ url: url }),
+			}).catch((error) => console.error(error));
+		};
+		postNewsURLtoAPI();
+	}, [url]);
 
 	return (
 		<Row className='m-3'>

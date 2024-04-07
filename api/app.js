@@ -2,6 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const cheerio = require('cheerio');
+const axios = require('axios');
+
 const app = express();
 const PORT = process.env.PORT;
 
@@ -176,6 +179,33 @@ app.get('/api/getNewsByTheme', (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200);
 	res.send(newsArray);
+});
+
+let articleURL = '';
+let result = [];
+
+app.post('/api/scrapeArticleData', async (req, res) => {
+	articleURL = req.body.url;
+
+	console.log(articleURL);
+
+	await fetch(articleURL)
+		.then((response) => {
+			return response.text();
+		})
+		.then((data) => {
+			const $ = cheerio.load(data);
+			const getArticle = $('article');
+			const getArticleText = getArticle.find('section').find('p.css-at9mc1').contents().text();
+
+			console.log(getArticleText);
+
+			//TODO: process the text and put sentences into array.
+		})
+		.catch((err) => console.error(err));
+
+	res.status(200);
+	res.end();
 });
 
 app.listen(PORT, (error) => {
