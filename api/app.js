@@ -2,8 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
+//used to scrape article data
 const cheerio = require('cheerio');
-const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -144,68 +144,75 @@ app.get('/api/sentimentAnalysis', (req, res) => {
 let theme = '';
 let newsArray = [];
 
-app.post('/api/getNewsByTheme', (req, res) => {
+app.post('/api/getNewsByTheme', async (req, res) => {
 	theme = req.body.theme;
+
+	console.log(theme);
 
 	//fetches news from NY Times API
 	const url = `https://api.nytimes.com/svc/topstories/v2/${theme}.json?api-key=`;
-	fetch(url + process.env.NY_TIMES_API)
-		.then(async (response) => {
-			if (!response.ok) {
-				throw response;
+	try {
+		const response = await fetch(url + process.env.NY_TIMES_API);
+		if (!response.ok) {
+			throw response;
+		}
+		const incomingData = await response.json();
+		for (let i = 0; i < incomingData.results.length; i++) {
+			if (!incomingData.results[i].url || incomingData.results[i].url === 'null') {
+				//returns articles with no urls
+				//console.log(incomingData.results[i]);
+			} else {
+				//returns articles with urls
+				newsArray.push(incomingData.results[i]);
 			}
-			return await response.json();
-		})
-		.then((incomingData) => {
-			console.log(incomingData);
-
-			for (let i = 0; i < incomingData.results.length; i++) {
-				if (!incomingData.results[i].url || incomingData.results[i].url === 'null') {
-					//returns articles with no urls
-					//console.log(incomingData.results[i]);
-				} else {
-					//returns articles with urls
-					newsArray.push(incomingData.results[i]);
-				}
-			}
-		})
-		.catch((err) => console.error(err));
-
-	res.status(200);
-	res.end();
+		}
+		res.status(200).end();
+	} catch (err) {
+		console.error(err);
+		res.status(500).end();
+	}
 });
 
 app.get('/api/getNewsByTheme', (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	res.status(200);
-	res.send(newsArray);
+	res.status(200).send(newsArray);
 });
 
 let articleURL = '';
-let result = [];
+let scrapedArticleData = {};
 
 app.post('/api/scrapeArticleData', async (req, res) => {
 	articleURL = req.body.url;
-
-	console.log(articleURL);
 
 	await fetch(articleURL)
 		.then((response) => {
 			return response.text();
 		})
 		.then((data) => {
-			const $ = cheerio.load(data);
-			const getArticle = $('article');
-			const getArticleText = getArticle.find('section').find('p.css-at9mc1').contents().text();
-
-			console.log(getArticleText);
-
-			//TODO: process the text and put sentences into array.
+			if (!data.includes('geo.captcha-delivery.com')) {
+				//scrape article text
+				const $ = cheerio.load(data);
+				const getArticle = $('article');
+				scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
+				console.log(scrapedArticleData);
+			} else {
+				console.log(data);
+				scrapedArticleData = {
+					error:
+						'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
+				};
+			}
 		})
 		.catch((err) => console.error(err));
 
 	res.status(200);
 	res.end();
+});
+
+app.get('/api/scrapeArticleData', async (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200);
+	res.send(await scrapedArticleData);
 });
 
 app.listen(PORT, (error) => {

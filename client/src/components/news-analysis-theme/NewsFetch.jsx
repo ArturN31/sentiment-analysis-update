@@ -17,50 +17,63 @@ const NewsFetch = (params) => {
 		const url = 'http://localhost:3001/api/getNewsByTheme';
 
 		// Checks if response is already stored
-		const storedNewsResponse = localStorage.getItem(`${getTheme}-newsResponse`);
+		const storedNewsResponse = sessionStorage.getItem(`${getTheme}-newsResponse`);
 
-		if (storedNewsResponse) {
-			//getting news from storage
-			setNews(JSON.parse(storedNewsResponse));
-		} else {
-			//getting news from api
-
-			//sends theme to api - used to retrieve news
-			const postParamsToAPI = async () => {
+		//sends theme to api - used to retrieve news
+		const postParamsToAPI = async () => {
+			try {
 				await fetch(url, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ theme: getTheme }),
-				}).catch((error) => console.error(error));
-			};
-			postParamsToAPI();
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		};
 
-			//retrieves news based on previously passed theme
-			const getNews = async () => {
-				await fetch(url)
-					.then(async (response) => {
-						if (!response.ok) {
-							throw response;
-						}
-						return await response.json();
-					})
-					.then(async (incomingData) => {
-						setNews(await incomingData);
-						localStorage.setItem(`${getTheme}-newsResponse`, JSON.stringify(incomingData));
-					})
-					.catch((error) => console.error(error));
-			};
-			getNews();
-		}
+		//retrieves news based on previously passed theme
+		const getNews = async () => {
+			try {
+				const response = await fetch(url);
+
+				if (!response.ok) {
+					throw response;
+				}
+
+				const incomingData = await response.json();
+
+				if (incomingData && incomingData.length > 0) {
+					setNews(incomingData);
+					sessionStorage.setItem(`${getTheme}-newsResponse`, JSON.stringify(incomingData));
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		const fetchData = async () => {
+			if (storedNewsResponse) {
+				// Getting news from storage
+				setNews(JSON.parse(storedNewsResponse));
+			} else {
+				// Getting news from API
+				try {
+					await postParamsToAPI();
+					await getNews();
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		};
+
+		fetchData();
 	}, [theme]);
 
 	useEffect(() => {
 		handleMaxCountChange(news.length);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [news]);
-
-	console.log(news);
-	//todo: add news display
 
 	return (
 		<>

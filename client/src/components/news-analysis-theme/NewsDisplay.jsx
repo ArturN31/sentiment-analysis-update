@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Row, Col, Card, Accordion, ListGroup } from 'react-bootstrap';
 //import NewsSentiment from './NewsSentiment';
 
 const NewsDisplay = (props) => {
 	const { newsData } = props;
 	const { title, published_date, multimedia, url } = newsData;
+
+	const [newsText, setNewsText] = useState(['']);
+	const [error, setError] = useState('');
 
 	//todo: scrape news data from urls and add it to output
 	useEffect(() => {
@@ -19,6 +22,18 @@ const NewsDisplay = (props) => {
 			}).catch((error) => console.error(error));
 		};
 		postNewsURLtoAPI();
+
+		const getNewsData = async () => {
+			await fetch(apiURL)
+				.then(async (response) => {
+					return await response.json();
+				})
+				.then((data) => {
+					setError(data.error)
+					setNewsText(data.text)
+				});
+		};
+		getNewsData();
 	}, [url]);
 
 	return (
@@ -47,7 +62,13 @@ const NewsDisplay = (props) => {
 										) : (
 											''
 										)}
-										<Card.Body></Card.Body>
+										<Card.Body>
+											{newsText
+												? <p className='text-center'>{newsText}</p>
+												: ''}
+
+											{error ? <p>{error}</p> : ''}
+										</Card.Body>
 									</ListGroup>
 								</Card.Body>
 							</Card>
