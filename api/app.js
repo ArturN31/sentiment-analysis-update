@@ -146,8 +146,8 @@ let newsArray = [];
 
 app.post('/api/getNewsByTheme', async (req, res) => {
 	theme = req.body.theme;
-
-	console.log(theme);
+	//reset stored news - ensures that updated version is pulled when calling api from client
+	newsArray = [];
 
 	//fetches news from NY Times API
 	const url = `https://api.nytimes.com/svc/topstories/v2/${theme}.json?api-key=`;
@@ -160,7 +160,6 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 		for (let i = 0; i < incomingData.results.length; i++) {
 			if (!incomingData.results[i].url || incomingData.results[i].url === 'null') {
 				//returns articles with no urls
-				//console.log(incomingData.results[i]);
 			} else {
 				//returns articles with urls
 				newsArray.push(incomingData.results[i]);
@@ -183,6 +182,8 @@ let scrapedArticleData = {};
 
 app.post('/api/scrapeArticleData', async (req, res) => {
 	articleURL = req.body.url;
+	//reset stored news text - ensures that updated version is pulled when calling api from client
+	scrapedArticleData = {};
 
 	await fetch(articleURL)
 		.then((response) => {
@@ -194,9 +195,7 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 				const $ = cheerio.load(data);
 				const getArticle = $('article');
 				scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
-				console.log(scrapedArticleData);
 			} else {
-				console.log(data);
 				scrapedArticleData = {
 					error:
 						'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
@@ -210,9 +209,11 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 });
 
 app.get('/api/scrapeArticleData', async (req, res) => {
-	res.setHeader('Content-Type', 'application/json');
-	res.status(200);
-	res.send(await scrapedArticleData);
+	if (scrapedArticleData !== '{}') {
+		res.setHeader('Content-Type', 'application/json');
+		res.status(200);
+		res.send(await scrapedArticleData);
+	}
 });
 
 app.listen(PORT, (error) => {

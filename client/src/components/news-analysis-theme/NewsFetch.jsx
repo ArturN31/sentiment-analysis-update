@@ -6,6 +6,7 @@ const NewsFetch = (params) => {
 	const { handleMaxCountChange } = params;
 	const { theme, count } = params.params;
 	const [news, setNews] = useState([]);
+	const [error, setError] = useState()
 
 	useEffect(() => {
 		//removes . from theme
@@ -72,6 +73,47 @@ const NewsFetch = (params) => {
 
 	useEffect(() => {
 		handleMaxCountChange(news.length);
+
+		const apiURL = 'http://localhost:3001/api/scrapeArticleData';
+
+		const fetchScrapedArticleText = async (article) => {
+			//TODO: ensure that storage is updated with the news that now contain text, if article does not have any text ensure to obtain it - REDUCE OVERALL AMOUNT OF API CALLS
+			try {
+				//send article url to api that scrapes the article text
+				const postResponse = await fetch(apiURL, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ url: article.url }),
+				});
+
+				if (!postResponse.ok) {
+					throw new Error('Failed to send article data to the api.');
+				}
+
+				//retrieve sraped article text
+				const getResponse = await fetch(apiURL);
+				const data = await getResponse.json();
+
+				//if text is available update the news array
+				if (data && data.text) {
+					const updatedArticle = { ...article, text: data.text };
+					setNews((prevNews) => {
+						const updatedNews = prevNews.map((a) => (a.url === article.url ? updatedArticle : a));
+						return updatedNews;
+					});
+				}
+
+				//update the error state for output
+				if (data && data.error) setError(data.error);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		const articlesToFetch = news.slice(0, count);
+		articlesToFetch.forEach((article) => {
+			fetchScrapedArticleText(article);
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [news]);
 
@@ -87,6 +129,7 @@ const NewsFetch = (params) => {
 					{news.slice(0, count).map((n) => (
 						<NewsDisplay
 							newsData={n}
+							error={error}
 							key={n.title}
 						/>
 					))}
