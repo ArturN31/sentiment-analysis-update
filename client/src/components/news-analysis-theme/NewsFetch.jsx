@@ -6,6 +6,7 @@ const NewsFetch = (params) => {
 	const { handleMaxCountChange } = params;
 	const { theme, count } = params.params;
 	const [news, setNews] = useState([]);
+	const [newsWithScrapedData, setNewsWithScrapedData] = useState([]);
 	const [error, setError] = useState()
 
 	useEffect(() => {
@@ -77,7 +78,6 @@ const NewsFetch = (params) => {
 		const apiURL = 'http://localhost:3001/api/scrapeArticleData';
 
 		const fetchScrapedArticleText = async (article) => {
-			//TODO: ensure that storage is updated with the news that now contain text, if article does not have any text ensure to obtain it - REDUCE OVERALL AMOUNT OF API CALLS
 			try {
 				//send article url to api that scrapes the article text
 				const postResponse = await fetch(apiURL, {
@@ -97,9 +97,14 @@ const NewsFetch = (params) => {
 				//if text is available update the news array
 				if (data && data.text) {
 					const updatedArticle = { ...article, text: data.text };
-					setNews((prevNews) => {
-						const updatedNews = prevNews.map((a) => (a.url === article.url ? updatedArticle : a));
-						return updatedNews;
+					setNewsWithScrapedData((prevNews) => {
+						if (prevNews.length > 0) {
+							const updatedNews = prevNews.map((a) => (a.url === article.url ? updatedArticle : a));
+							return updatedNews;
+						} else {
+							const updatedNews = news.map((a) => (a.url === article.url ? updatedArticle : a));
+							return updatedNews;
+						}
 					});
 				}
 
@@ -111,11 +116,13 @@ const NewsFetch = (params) => {
 		};
 
 		const articlesToFetch = news.slice(0, count);
-		articlesToFetch.forEach((article) => {
-			fetchScrapedArticleText(article);
+		articlesToFetch.forEach(async (article) => {
+			await fetchScrapedArticleText(article);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [news]);
+
+	console.log(newsWithScrapedData)
 
 	return (
 		<>
@@ -126,7 +133,13 @@ const NewsFetch = (params) => {
 			</Row>
 			<Row>
 				<Col>
-					{news.slice(0, count).map((n) => (
+					{newsWithScrapedData.length > 0 ? newsWithScrapedData.slice(0, count).map((n) => (
+						<NewsDisplay
+							newsData={n}
+							error={error}
+							key={n.title}
+						/>
+					)) : news.slice(0, count).map((n) => (
 						<NewsDisplay
 							newsData={n}
 							error={error}
