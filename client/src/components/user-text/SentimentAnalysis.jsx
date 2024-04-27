@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 
-import SentimentOutput from './user-text/SentimentOutput';
+import SentimentOutput from '../SentimentOutput';
 
 const SentimentAnalysis = ({ textToAnalyse }) => {
 	const [sentimentResponse, setSentimentResponse] = useState({});

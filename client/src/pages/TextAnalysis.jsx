@@ -2,7 +2,7 @@ import { Container } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 
 import InputForm from '../components/user-text/InputForm';
-import SentimentAnalysis from '../components/SentimentAnalysis';
+import SentimentAnalysis from '../components/user-text/SentimentAnalysis';
 
 import { useState } from 'react';
 

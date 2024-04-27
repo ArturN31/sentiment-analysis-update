@@ -2,6 +2,8 @@
 
 import { Row, Col, Card, Accordion, ListGroup } from 'react-bootstrap';
 
+import SentimentOutput from '../SentimentOutput';
+
 const NewsDisplay = (props) => {
 	const { newsData, error } = props;
 	const { title, published_date, multimedia, text } = newsData;
@@ -30,6 +32,9 @@ const NewsDisplay = (props) => {
 										)}
 										<Card.Body className='text-center'>
 											<p>{text}</p>
+
+											<SentimentOutput sentimentResponse={newsData.sentimentAnalysis} />
+
 											<p>{error}</p>
 										</Card.Body>
 									</ListGroup>
