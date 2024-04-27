@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -16,9 +15,6 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false })); //body parser
 app.use(express.json()); //parses incoming json to the req.body
 
-// Have Node serve the files for built React app
-app.use(express.static(path.resolve(__dirname, '../client/dist')));
-
 var Analyzer = require('natural').SentimentAnalyzer;
 var stemmer = require('natural').PorterStemmer;
 var analyzer = new Analyzer('English', stemmer, 'afinn');
@@ -26,117 +22,132 @@ var analyzer = new Analyzer('English', stemmer, 'afinn');
 var natural = require('natural');
 var tokenizer = new natural.WordTokenizer();
 
-// Function to perform sentiment analysis based on a given score
-const sentimentAnalysis = (score, textToTokenize) => {
-	// Object containing sentiment categories and their associated data
-	const sentimentData = {
-		'very positive': {
-			emotion: ['elation', 'exhilaration', 'delight', 'enthusiasm', 'gratitude'],
-			positivityLevel: 'high',
-			intensity: 'strong',
-		},
-		positive: {
-			emotion: ['happiness', 'contentment', 'optimism', 'satisfaction', 'hope'],
-			positivityLevel: 'moderate',
-			intensity: 'moderate',
-		},
-		'slightly positive': {
-			emotion: ['pleasure', 'interest', 'cheerfulness', 'amusement', 'relief'],
-			positivityLevel: 'low',
-			intensity: 'mild',
-		},
-		neutral: {
-			emotion: ['equanimity', 'objectivity', 'detachment', 'calmness', 'acceptance'],
-			positivityLevel: 'neutral',
-			intensity: 'neutral',
-		},
-		'slightly negative': {
-			emotion: ['disappointment', 'worry', 'pessimism', 'concern', 'doubt'],
-			positivityLevel: 'low',
-			intensity: 'mild',
-		},
-		negative: {
-			emotion: ['sadness', 'frustration', 'anger', 'regret', 'resentment'],
-			positivityLevel: 'moderate',
-			intensity: 'negative',
-		},
-		'very negative': {
-			emotion: ['despair', 'grief', 'rage', 'helplessness', 'bitterness'],
-			positivityLevel: 'low',
-			intensity: 'strong',
-		},
-	};
+let textToTokenize = '';
 
-	// Iterate over sentimentData to find the appropriate sentiment category based on the score
-	for (const sentiment in sentimentData) {
-		const { lowerThreshold, upperThreshold } = getThresholds(sentiment);
+app.post('/api/sentimentAnalysis', (req, res) => {
+	textToTokenize = req.body.text;
+	res.sendStatus(200);
+	res.end();
+});
 
-		if (score > lowerThreshold && score <= upperThreshold) {
-			// Return the sentiment analysis result
-			return {
-				sentiment,
-				description: [
-					`The analysed text reflects a ${sentiment.toLowerCase()} sentiment with a score of ${score.toFixed(2)}.`,
-					`It elicits emotions of ${sentimentData[sentiment].emotion.join(', ')}.`,
-					`The positivity level is categorised as ${sentimentData[sentiment].positivityLevel}, indicating ${
-						sentimentData[sentiment].intensity === 'neutral'
-							? 'an absence of strong positive or negative emotions'
-							: `a ${sentimentData[sentiment].intensity.toLowerCase()} impact of the text`
-					}.`,
-				],
-				analysedText: textToTokenize,
-			};
-		}
-	}
-
-	// Sentiment cannot be determined
-	return {
-		sentiment: 'Unknown',
-		description: [
-			'The sentiment of the analyzed text could not be determined.',
-			'Please check the input and try again.',
-		],
-	};
-};
-
-// Function to retrieve the lower and upper score thresholds for a given sentiment category
-const getThresholds = (sentiment) => {
-	// Object containing the score thresholds for each sentiment category
-	const thresholds = {
-		'very positive': { lowerThreshold: 0.8, upperThreshold: 1 },
-		positive: { lowerThreshold: 0.4, upperThreshold: 0.8 },
-		'slightly positive': { lowerThreshold: 0.1, upperThreshold: 0.4 },
-		neutral: { lowerThreshold: -0.1, upperThreshold: 0.1 },
-		'slightly negative': { lowerThreshold: -0.4, upperThreshold: -0.1 },
-		negative: { lowerThreshold: -0.8, upperThreshold: -0.4 },
-		'very negative': { lowerThreshold: -1, upperThreshold: -0.8 },
-	};
-
-	return thresholds[sentiment];
-};
-
-app.post('/api/sentimentAnalysis', async (req, res) => {
-	const textToTokenize = req.body.text;
-
+app.get('/api/sentimentAnalysis', (req, res) => {
 	if (textToTokenize === '') {
 		const response = {
 			error: 'Missing text for sentiment analysis.',
 		};
-		res.status(400).json(response); // Use res.json() to send JSON data
-		return;
+		res.status(400);
+		res.send(response);
 	}
 
 	const tokenizedText = tokenizer.tokenize(textToTokenize);
 	const sentimentScore = analyzer.getSentiment(tokenizedText);
-	const sentiment = sentimentAnalysis(sentimentScore, textToTokenize);
 
-	res.status(200).send(sentiment); // Send sentiment data as JSON
+	// Function to perform sentiment analysis based on a given score
+	const sentimentAnalysis = (score) => {
+		// Object containing sentiment categories and their associated data
+		const sentimentData = {
+			'very positive': {
+				emotion: ['elation', 'exhilaration', 'delight', 'enthusiasm', 'gratitude'],
+				positivityLevel: 'high',
+				intensity: 'strong',
+			},
+			positive: {
+				emotion: ['happiness', 'contentment', 'optimism', 'satisfaction', 'hope'],
+				positivityLevel: 'moderate',
+				intensity: 'moderate',
+			},
+			'slightly positive': {
+				emotion: ['pleasure', 'interest', 'cheerfulness', 'amusement', 'relief'],
+				positivityLevel: 'low',
+				intensity: 'mild',
+			},
+			neutral: {
+				emotion: ['equanimity', 'objectivity', 'detachment', 'calmness', 'acceptance'],
+				positivityLevel: 'neutral',
+				intensity: 'neutral',
+			},
+			'slightly negative': {
+				emotion: ['disappointment', 'worry', 'pessimism', 'concern', 'doubt'],
+				positivityLevel: 'low',
+				intensity: 'mild',
+			},
+			negative: {
+				emotion: ['sadness', 'frustration', 'anger', 'regret', 'resentment'],
+				positivityLevel: 'moderate',
+				intensity: 'negative',
+			},
+			'very negative': {
+				emotion: ['despair', 'grief', 'rage', 'helplessness', 'bitterness'],
+				positivityLevel: 'low',
+				intensity: 'strong',
+			},
+		};
+
+		// Iterate over sentimentData to find the appropriate sentiment category based on the score
+		for (const sentiment in sentimentData) {
+			const { lowerThreshold, upperThreshold } = getThresholds(sentiment);
+
+			if (score > lowerThreshold && score <= upperThreshold) {
+				// Return the sentiment analysis result
+				return {
+					sentiment,
+					description: [
+						`The analysed text reflects a ${sentiment.toLowerCase()} sentiment with a score of ${score.toFixed(2)}.`,
+						`It elicits emotions of ${sentimentData[sentiment].emotion.join(', ')}.`,
+						`The positivity level is categorised as ${sentimentData[sentiment].positivityLevel}, indicating ${
+							sentimentData[sentiment].intensity === 'neutral'
+								? 'an absence of strong positive or negative emotions'
+								: `a ${sentimentData[sentiment].intensity.toLowerCase()} impact of the text`
+						}.`,
+					],
+				};
+			}
+		}
+
+		// Sentiment cannot be determined
+		return {
+			sentiment: 'Unknown',
+			description: [
+				'The sentiment of the analyzed text could not be determined.',
+				'Please check the input and try again.',
+			],
+		};
+	};
+
+	// Function to retrieve the lower and upper score thresholds for a given sentiment category
+	const getThresholds = (sentiment) => {
+		// Object containing the score thresholds for each sentiment category
+		const thresholds = {
+			'very positive': { lowerThreshold: 0.8, upperThreshold: 1 },
+			positive: { lowerThreshold: 0.4, upperThreshold: 0.8 },
+			'slightly positive': { lowerThreshold: 0.1, upperThreshold: 0.4 },
+			neutral: { lowerThreshold: -0.1, upperThreshold: 0.1 },
+			'slightly negative': { lowerThreshold: -0.4, upperThreshold: -0.1 },
+			negative: { lowerThreshold: -0.8, upperThreshold: -0.4 },
+			'very negative': { lowerThreshold: -1, upperThreshold: -0.8 },
+		};
+
+		return thresholds[sentiment];
+	};
+
+	const response = {
+		// passedText: textToTokenize,
+		// tokenizedText: tokenizedText,
+		...sentimentAnalysis(sentimentScore),
+	};
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200);
+	res.send(response);
 });
 
+let theme = '';
+let newsArray = [];
+
 app.post('/api/getNewsByTheme', async (req, res) => {
-	const theme = req.body.theme;
+	theme = req.body.theme;
 	//reset stored news - ensures that updated version is pulled when calling api from client
-	const newsArray = [];
+	newsArray = [];
 
 	//fetches news from NY Times API
 	const url = `https://api.nytimes.com/svc/topstories/v2/${theme}.json?api-key=`;
@@ -154,17 +165,25 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 				newsArray.push(incomingData.results[i]);
 			}
 		}
-		res.status(200).send(newsArray);
+		res.status(200).end();
 	} catch (err) {
 		console.error(err);
 		res.status(500).end();
 	}
 });
 
+app.get('/api/getNewsByTheme', (req, res) => {
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(newsArray);
+});
+
+let articleURL = '';
+let scrapedArticleData = {};
+
 app.post('/api/scrapeArticleData', async (req, res) => {
-	const articleURL = req.body.url;
+	articleURL = req.body.url;
 	//reset stored news text - ensures that updated version is pulled when calling api from client
-	let scrapedArticleData = {};
+	scrapedArticleData = {};
 
 	await fetch(articleURL)
 		.then((response) => {
@@ -185,12 +204,16 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 		})
 		.catch((err) => console.error(err));
 
-	res.status(200).send(await scrapedArticleData);
+	res.status(200);
+	res.end();
 });
 
-//will return build of React app
-app.get('/', (req, res) => {
-	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+app.get('/api/scrapeArticleData', async (req, res) => {
+	if (scrapedArticleData !== '{}') {
+		res.setHeader('Content-Type', 'application/json');
+		res.status(200);
+		res.send(await scrapedArticleData);
+	}
 });
 
 app.listen(PORT, (error) => {
