@@ -12,22 +12,19 @@ const SentimentAnalysis = ({ textToAnalyse }) => {
 			const fetchResponse = async () => {
 				if (textToAnalyse.text) {
 					const url = 'http://localhost:3001/api/sentimentAnalysis';
-					await fetch(url, {
+					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify(textToAnalyse),
 					}).catch((error) => console.error(error));
 
-					await fetch(url)
-						.then(async (response) => {
-							if (!response.ok) {
-								throw response;
-							}
-							return await response.json();
-						})
-						.then(async (incomingData) => {
-							setSentimentResponse(await incomingData);
-						});
+					if (!response.ok) {
+						throw response;
+					}
+
+					const incomingData = await response.json();
+
+					setSentimentResponse(incomingData);
 				}
 			};
 			fetchResponse();
