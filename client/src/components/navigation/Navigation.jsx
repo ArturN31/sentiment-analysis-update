@@ -45,14 +45,14 @@ const Navigation = () => {
 								News Analysis by Theme
 							</NavLink>
 						</Nav.Item>
-						{/* <Nav.Item>
+						<Nav.Item>
 							<NavLink
 								to='/NewsAnalysisDate'
 								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
 								News Analysis by Date
 							</NavLink>
 						</Nav.Item>
-						<Nav.Item>
+						{/* <Nav.Item>
 							<NavLink
 								to='/Map'
 								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>

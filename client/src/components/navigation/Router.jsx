@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Homepage from '../../pages/Homepage';
 import TextAnalysis from '../../pages/TextAnalysis';
-import NewsAnalysisTheme from '../../pages/NewsAnalysisByTheme';
-// import NewsAnalysisDate from '../../pages/news-analysis-date';
+import NewsAnalysisByTheme from '../../pages/NewsAnalysisByTheme';
+import NewsAnalysisByDate from '../../pages/NewsAnalysisByDate';
 // import Map from '../../pages/map';
 // import NoMatch from '../../pages/no-match';
 import Navigation from './Navigation';
@@ -26,13 +26,13 @@ const Router = () => {
 					/>{' '}
 					<Route
 						path='/NewsAnalysisTheme'
-						element={<NewsAnalysisTheme />}
-					/>{' '}
-					{/* <Route
-						path='/NewsAnalysisDate'
-						element={<NewsAnalysisDate />}
+						element={<NewsAnalysisByTheme />}
 					/>{' '}
 					<Route
+						path='/NewsAnalysisDate'
+						element={<NewsAnalysisByDate />}
+					/>{' '}
+					{/* <Route
 						path='/Map'
 						element={<Map />}
 					/>{' '}
