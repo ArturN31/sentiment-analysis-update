@@ -134,7 +134,7 @@ function SetNewsParams() {
 							</Form.Group>
 						</Col>
 					</Row>
-					<Row className='w'>
+					<Row>
 						<Col className='d-flex justify-content-center'>
 							<Button
 								onClick={() => {

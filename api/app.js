@@ -142,10 +142,11 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 	const url = `https://api.nytimes.com/svc/topstories/v2/${theme}.json?api-key=`;
 	try {
 		const response = await fetch(url + process.env.NY_TIMES_API);
-		if (!response.ok) {
-			throw response;
-		}
+
+		if (!response.ok) throw response;
+
 		const incomingData = await response.json();
+
 		for (let i = 0; i < incomingData.results.length; i++) {
 			if (!incomingData.results[i].url || incomingData.results[i].url === 'null') {
 				//returns articles with no urls
@@ -167,7 +168,11 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	let scrapedArticleData = {};
 	try {
 		const response = await fetch(articleURL);
+
+		if (!response.ok) throw response;
+
 		const data = await response.text();
+
 		if (!data.includes('geo.captcha-delivery.com')) {
 			//scrape article text
 			const $ = cheerio.load(data);
@@ -195,10 +200,11 @@ app.post('/api/getNewsByDate', async (req, res) => {
 	try {
 		const NYTimesAPI = `https://api.nytimes.com/svc/archive/v1/${year}/${month}.json?api-key=`;
 		const response = await fetch(NYTimesAPI + process.env.NY_TIMES_API);
-		if (!response.ok) {
-			throw response;
-		}
+
+		if (!response.ok) throw response;
+
 		const incomingData = await response.json();
+
 		for (let i = 0; i < incomingData.response.docs.length; i++) {
 			if (!incomingData.response.docs[i].web_url || incomingData.response.docs[i].web_url === 'null') {
 				//returns articles with no urls
