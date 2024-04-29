@@ -52,13 +52,13 @@ const Navigation = () => {
 								News Analysis by Date
 							</NavLink>
 						</Nav.Item>
-						{/* <Nav.Item>
+						<Nav.Item>
 							<NavLink
-								to='/Map'
+								to='/InteractiveMap'
 								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								Map
+								Interactive Map
 							</NavLink>
-						</Nav.Item> */}
+						</Nav.Item>
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

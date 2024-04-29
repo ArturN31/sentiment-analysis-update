@@ -4,8 +4,8 @@ import Homepage from '../../pages/Homepage';
 import TextAnalysis from '../../pages/TextAnalysis';
 import NewsAnalysisByTheme from '../../pages/NewsAnalysisByTheme';
 import NewsAnalysisByDate from '../../pages/NewsAnalysisByDate';
-// import Map from '../../pages/map';
-// import NoMatch from '../../pages/no-match';
+import InteractiveMap from '../../pages/InteractiveMap';
+import NoMatch from '../../pages/NoMatch';
 import Navigation from './Navigation';
 
 //Simple header of the page
@@ -32,14 +32,14 @@ const Router = () => {
 						path='/NewsAnalysisDate'
 						element={<NewsAnalysisByDate />}
 					/>{' '}
-					{/* <Route
-						path='/Map'
-						element={<Map />}
+					<Route
+						path='/InteractiveMap'
+						element={<InteractiveMap />}
 					/>{' '}
 					<Route
 						path='*'
 						element={<NoMatch />}
-					/>{' '} */}
+					/>{' '}
 				</Route>
 			</Routes>
 		</BrowserRouter>
