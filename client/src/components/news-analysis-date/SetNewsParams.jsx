@@ -34,8 +34,10 @@ function SetNewsParams() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ month: params.month, year: params.year })
             }
-            const response = fetch(apiURL, options);
-            //const data = await response.json()
+            const response = await fetch(apiURL, options);
+            if (!response.ok) throw response;
+            const incomingData = await response.json();
+
         } catch (error) { console.error(error); }
     };
 
