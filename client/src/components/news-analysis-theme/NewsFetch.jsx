@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import NewsDisplay from './NewsDisplay';
+import SentimentOccurrence from '../SentimentOccurrence';
 
 const NewsFetch = (params) => {
 	const { handleMaxCountChange } = params;
@@ -143,6 +144,12 @@ const NewsFetch = (params) => {
 			<Row className='d-flex justify-content-center'>
 				<Col className='col-6 m-4 text-white text-center'>
 					<span>Total amount of available articles: {news.length}</span>
+				</Col>
+
+			</Row>
+			<Row>
+				<Col>
+					<SentimentOccurrence updatedNews={updatedNews} />
 				</Col>
 			</Row>
 			<Row>
