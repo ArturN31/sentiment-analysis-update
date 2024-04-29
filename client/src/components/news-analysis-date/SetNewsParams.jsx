@@ -27,7 +27,16 @@ function SetNewsParams() {
     }
 
     const handleSubmit = async () => {
-        console.log(params)
+        try {
+            const apiURL = 'http://localhost:3001/api/getNewsByDate';
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ month: params.month, year: params.year })
+            }
+            const response = fetch(apiURL, options);
+            //const data = await response.json()
+        } catch (error) { console.error(error); }
     };
 
     return (

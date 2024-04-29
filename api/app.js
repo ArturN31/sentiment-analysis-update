@@ -188,6 +188,14 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	res.status(200).send(await scrapedArticleData);
 });
 
+app.post('/api/getNewsByDate', async (req, res) => {
+	const { month, year } = req.body;
+	console.log(month);
+	console.log(year);
+
+	res.status(200);
+});
+
 //will return build of React app
 app.get('/', (req, res) => {
 	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
