@@ -165,27 +165,25 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 	//reset stored news text - ensures that updated version is pulled when calling api from client
 	let scrapedArticleData = {};
-
-	await fetch(articleURL)
-		.then((response) => {
-			return response.text();
-		})
-		.then((data) => {
-			if (!data.includes('geo.captcha-delivery.com')) {
-				//scrape article text
-				const $ = cheerio.load(data);
-				const getArticle = $('article');
-				scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
-			} else {
-				scrapedArticleData = {
-					error:
-						'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
-				};
-			}
-		})
-		.catch((err) => console.error(err));
-
-	res.status(200).send(await scrapedArticleData);
+	try {
+		const response = await fetch(articleURL);
+		const data = await response.text();
+		if (!data.includes('geo.captcha-delivery.com')) {
+			//scrape article text
+			const $ = cheerio.load(data);
+			const getArticle = $('article');
+			scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
+		} else {
+			scrapedArticleData = {
+				error:
+					'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
+			};
+		}
+		res.status(200).send(await scrapedArticleData);
+	} catch (error) {
+		console.log(error);
+		res.status(500).end();
+	}
 });
 
 app.post('/api/getNewsByDate', async (req, res) => {
