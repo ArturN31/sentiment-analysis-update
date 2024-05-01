@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap"
 import NewsDisplay from "./NewsDisplay";
 import SentimentOccurrence from "../SentimentOccurrence";
+import InteractiveMap from "../interactive-map/InteractiveMap";
 
 const NewsFetch = ({ params, handleMaxCountChange }) => {
     const { month, year, count } = params;
@@ -10,7 +11,11 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
     const [updatedNews, setUpdatedNews] = useState([]);
     const [error, setError] = useState()
 
+    const [currentPage, setCurrentPage] = useState('');
+
     useEffect(() => {
+        setCurrentPage(document.URL.split('/').pop())
+
         const fetchNewsByDate = async () => {
             try {
                 const apiURL = 'http://localhost:3001/api/getNewsByDate';
@@ -47,12 +52,11 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
                 const data = await response.json();
 
-                if (data && data.text) {
+                if (data.text) {
                     return { ...article, text: data.text };
-                } else if (data && data.error) {
+                } else if (data.error) {
                     setError(data.error);
                 }
-
             } catch (error) {
                 console.error(error);
             }
@@ -80,20 +84,44 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
             }
         };
 
-        const updateNews = async () => {
-            const articlesToScrapeTextFor = news.slice(0, count);
-
+        const fetchNewsData = async (articles) => {
             const results = await Promise.allSettled(
-                articlesToScrapeTextFor.map(async (article) => {
-                    const updatedArticleWithText = await fetchScrapedArticleText(article);
-                    const updatedArticleWithSentiment = await fetchSentimentAnalysis(updatedArticleWithText);
-                    return updatedArticleWithSentiment
+                articles.map(async (article) => {
+                    try {
+                        const updatedArticleWithText = await fetchScrapedArticleText(article);
+
+                        if (updatedArticleWithText === undefined) {
+                            setError('Cannot retrieve text for article(s).');
+                            return;
+                        }
+
+                        const updatedArticleWithSentiment = await fetchSentimentAnalysis(updatedArticleWithText);
+                        return updatedArticleWithSentiment;
+                    } catch (error) {
+                        console.error('Error fetching data for article:', article, error);
+                    }
                 })
             );
 
-            // Filter successful updates from the results (excluding undefined)
-            const updatedNews = results.filter((result) => result.status === 'fulfilled' && result.value)
-                .map((result) => result.value);
+            const updatedNews = results
+                .filter(result => result.status === 'fulfilled' && result.value)
+                .map(result => result.value);
+
+            return updatedNews;
+        };
+
+        const updateNews = async () => {
+            const currentURL = document.URL;
+            const currentPage = currentURL.split('/').pop();
+
+            const filteredNews = currentPage === 'InteractiveMap'
+                ? news.filter(article => article.keywords.some(keyword => keyword.name.toLowerCase() === "glocations"))
+                : news;
+
+            const articlesToScrapeTextFor = filteredNews.slice(0, count);
+            const updatedNews = await fetchNewsData(articlesToScrapeTextFor);
+
+            if (updatedNews.length > 0) setError('')
 
             setUpdatedNews(updatedNews);
         };
@@ -110,18 +138,21 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
             </Row>
             <Row>
                 <Col>
-                    <SentimentOccurrence updatedNews={updatedNews} />
+                    <p className="text-center">{error}</p>
+                    {updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    {updatedNews.length > 0 ? updatedNews.slice(0, count).map((n) => (
+                    {currentPage === 'NewsAnalysisDate' && updatedNews.length > 0 ? updatedNews.slice(0, count).map((n) => (
                         <NewsDisplay
                             newsData={n}
-                            error={error}
                             key={n.headline.main}
                         />
+
                     )) : ''}
+
+                    {currentPage === 'InteractiveMap' && updatedNews.length > 0 ? <InteractiveMap news={updatedNews} /> : ''}
                 </Col>
             </Row>
         </>

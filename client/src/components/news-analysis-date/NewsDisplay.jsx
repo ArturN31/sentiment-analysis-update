@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
-
 import { Row, Col, Card, Accordion, ListGroup } from 'react-bootstrap';
 import SentimentOutput from '../SentimentOutput';
 
 const NewsDisplay = (props) => {
-    const { newsData, error } = props;
+    const { newsData } = props;
     const { headline, pub_date, multimedia, text } = newsData;
 
     return (
@@ -34,7 +33,6 @@ const NewsDisplay = (props) => {
 
                                             <SentimentOutput sentimentResponse={newsData.sentimentAnalysis} />
 
-                                            <p>{error}</p>
                                         </Card.Body>
                                     </ListGroup>
                                 </Card.Body>
