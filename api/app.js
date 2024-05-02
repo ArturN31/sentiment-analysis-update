@@ -221,6 +221,27 @@ app.post('/api/getNewsByDate', async (req, res) => {
 	}
 });
 
+app.post('/api/getCoordinates', async (req, res) => {
+	const { geolocation } = req.body;
+
+	try {
+		const url = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(geolocation)}&access_token=${
+			process.env.MAPBOX_API_KEY
+		}`;
+
+		const response = await fetch(url);
+
+		if (!response.ok) throw coordinates;
+
+		const coordinates = await response.json();
+
+		res.status(200).send(JSON.stringify(coordinates.features[0].properties.coordinates));
+	} catch (error) {
+		console.log(error);
+		res.status(500).end();
+	}
+});
+
 //will return build of React app
 app.get('/', (req, res) => {
 	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
