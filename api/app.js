@@ -225,17 +225,20 @@ app.post('/api/getCoordinates', async (req, res) => {
 	const { geolocation } = req.body;
 
 	try {
-		const url = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(geolocation)}&access_token=${
-			process.env.MAPBOX_API_KEY
-		}`;
+		const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(geolocation)}&format=json`;
 
 		const response = await fetch(url);
 
 		if (!response.ok) throw coordinates;
 
-		const coordinates = await response.json();
+		const incomingData = await response.json();
 
-		res.status(200).send(JSON.stringify(coordinates.features[0].properties.coordinates));
+		const coordinates = {
+			latitude: incomingData[0].lat,
+			longitude: incomingData[0].lon,
+		};
+
+		res.status(200).send(JSON.stringify(coordinates));
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();

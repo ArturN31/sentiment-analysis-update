@@ -49,7 +49,9 @@ const InteractiveMap = ({ news }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log(newsWithCoords);
+    useEffect(() => {
+        console.log(newsWithCoords);
+    }, [newsWithCoords])
 
     return <p className="text-center">Interactive Map</p>
 }
