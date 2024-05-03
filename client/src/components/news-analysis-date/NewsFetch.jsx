@@ -91,7 +91,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
                         const updatedArticleWithText = await fetchScrapedArticleText(article);
 
                         if (updatedArticleWithText === undefined) {
-                            setError('Cannot retrieve text for article(s).');
+                            setError("Looks like some articles are missing details. Let's try searching for a wider range of articles.");
                             return;
                         }
 

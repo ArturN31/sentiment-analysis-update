@@ -1,8 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
+import { Row, Col } from "react-bootstrap"
+import 'leaflet/dist/leaflet.css'
+import { MapContainer, TileLayer } from 'react-leaflet'
+import ArticleMarkers from "./ArticleMarkers";
+
 
 const InteractiveMap = ({ news }) => {
     const [newsWithCoords, setNewsWithCoords] = useState();
+    const [userCoords, setUserCoords] = useState();
 
     useEffect(() => {
         const getNewsCoordinates = async (geolocation) => {
@@ -46,14 +52,24 @@ const InteractiveMap = ({ news }) => {
         };
 
         handleNewsKeywords()
+        navigator.geolocation.getCurrentPosition((position) => setUserCoords([position.coords.latitude, position.coords.longitude]))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        console.log(newsWithCoords);
-    }, [newsWithCoords])
+    return (
+        <Row className="d-flex justify-content-center">
+            <Col className="col-12 col-xl-8 col-xxl-6 m-5 bg-dark p-2 rounded-2">
+                {userCoords ? <MapContainer center={userCoords} zoom={2} scrollWheelZoom={true} style={{ height: "400px", width: "100%" }}>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
 
-    return <p className="text-center">Interactive Map</p>
+                    <ArticleMarkers newsWithCoords={newsWithCoords} />
+                </MapContainer> : ''}
+            </Col>
+        </Row>
+    )
 }
 
 export default InteractiveMap;
