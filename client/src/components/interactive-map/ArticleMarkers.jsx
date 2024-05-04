@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import 'leaflet/dist/leaflet.css'
 import { Marker, Popup } from "react-leaflet"
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, Container } from "react-bootstrap"
+import SentimentOutput from '../SentimentOutput'
 
 const ArticleMarkers = ({ newsWithCoords }) => {
     const usedCoordinates = []; // Array to store used coordinates
@@ -15,22 +16,44 @@ const ArticleMarkers = ({ newsWithCoords }) => {
         return coordinates;
     };
 
+    console.log(newsWithCoords)
+
     const markers = newsWithCoords && newsWithCoords.map((article, index) => (
         <Marker key={index} position={getArticleCoordinates(article)}>
             <Popup>
-                <Row>
-                    <Col className="col-12">
-                        <h5 className="tooltip-text">{article.headline.main}</h5>
-                    </Col>
-                    {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? <Col className="col-12 d-flex justify-content-center">
-                        <img
-                            style={{ width: "inherit", margin: "auto" }}
-                            className='w-50'
-                            src={`https://www.nytimes.com/${article.multimedia[0].url}`}
-                            alt={`Image for article: ${article.headline.print_headline}`}
-                        />
-                    </Col> : ''}
-                </Row>
+                <Container className='px-1 py-3'>
+                    <div className='mb-2'>
+                        <Row>
+                            <Col>
+                                <h5 className="mb-2 text-center p-2 border rounded bg-body-secondary">{article.headline.main}</h5>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col>
+                                {article.abstract ? (
+                                    <p className='m-0 text-center p-2 border rounded bg-body-tertiary'>{article.abstract}</p>
+                                ) : ''}
+                            </Col>
+                        </Row>
+                    </div>
+
+                    <Row>
+                        <Col className='d-flex justify-content-center'>
+                            {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
+                                <img
+                                    className='w-100 rounded border object-fit-cover'
+                                    src={`https://www.nytimes.com/${article.multimedia[0].url}`}
+                                    alt={`Image for article: ${article.headline.print_headline}`}
+                                />
+                            ) : ''}
+                        </Col>
+
+                        <Col className='d-flex m-auto'>
+                            <SentimentOutput sentimentResponse={article.sentimentAnalysis} />
+                        </Col>
+                    </Row>
+                </Container>
             </Popup>
         </Marker>
     ));

@@ -24,7 +24,7 @@ const SentimentCard = ({ sentiment, description }) => {
 		<Row>
 			<h1>{prepTitle()}</h1>
 			{description.map((paragraph, index) => (
-				<p key={index}>{paragraph}</p>
+				<p className='m-1' key={index}>{paragraph}</p>
 			))}
 		</Row>
 	);

@@ -53,7 +53,7 @@ const SentimentOutput = ({ sentimentResponse }) => {
 	return sentimentResponse.sentiment ? (
 		<div
 			style={style}
-			className='m-4 emotion-div'
+			className='emotion-div text-center p-2 rounded'
 			id='sentiment-output'>
 			<SentimentCard
 				description={description}
