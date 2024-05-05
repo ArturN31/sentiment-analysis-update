@@ -1,5 +1,5 @@
-/* TEMPLATE */
 html,
+span,
 p,
 h1,
 h2,
@@ -7,16 +7,6 @@ h3,
 h4,
 h5 {
 	font-family: 'Heebo', sans-serif !important;
-}
-
-h1 {
-	font-size: 32px !important;
-	font-weight: 300 !important;
-}
-
-p {
-	font-size: 16px !important;
-	font-weight: 300 !important;
 }
 
 .container-fluid {
@@ -48,24 +38,6 @@ p {
 		margin-inline: 5px;
 	}
 }
-
-#dropdown-themes {
-	width: 100%;
-}
-
-.dropdown-menu {
-	height: 15rem;
-	overflow-y: scroll;
-}
-
-.user-input-div {
-	padding: 35px 65px 35px 65px;
-	border-radius: 39px;
-
-	background-color: #ffff;
-	box-shadow: 0px 4px 30px 10px rgba(0, 0, 0, 0.2);
-}
-/* EOF TEMPLATE */
 
 /* ACCORDION */
 .accordion-header {

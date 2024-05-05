@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 import NewsDisplay from './NewsDisplay';
 import SentimentOccurrence from '../SentimentOccurrence';
 
@@ -140,30 +140,19 @@ const NewsFetch = (params) => {
 	}, [news]);
 
 	return (
-		<>
-			<Row className='d-flex justify-content-center'>
-				<Col className='col-6 m-4 text-white text-center'>
-					<span>Total amount of available articles: {news.length}</span>
-				</Col>
+		<Stack gap={3} className='my-3'>
+			<p className='text-center'>Total amount of available articles: {news.length}</p>
 
-			</Row>
-			<Row>
-				<Col>
-					<SentimentOccurrence updatedNews={updatedNews} />
-				</Col>
-			</Row>
-			<Row>
-				<Col>
-					{updatedNews.length > 0 ? updatedNews.slice(0, count).map((n) => (
-						<NewsDisplay
-							newsData={n}
-							error={error}
-							key={n.title}
-						/>
-					)) : ''}
-				</Col>
-			</Row>
-		</>
+			<SentimentOccurrence updatedNews={updatedNews} />
+
+			{updatedNews.length > 0 ? updatedNews.slice(0, count).map((n) => (
+				<NewsDisplay
+					newsData={n}
+					error={error}
+					key={n.title}
+				/>
+			)) : ''}
+		</Stack>
 	);
 };
 

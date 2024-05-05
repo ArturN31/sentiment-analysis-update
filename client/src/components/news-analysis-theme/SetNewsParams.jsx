@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Col, Form, DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import { Stack, Form, DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import NewsFetch from './NewsFetch';
 
 const themes = [
@@ -89,39 +89,36 @@ function SetNewsParams() {
 	};
 
 	return (
-		<Row>
-			<Col>
-				<Form className='col-6 mx-auto user-input-div'>
-					<Row className='text-center'>
-						<Col>
-							<p>First choose the theme from a drop down list, then enter the article count to be displayed.</p>
-						</Col>
-					</Row>
-					<Row>
-						<Col>
-							<Form.Group controlId='f_count'>
-								<Form.Label>Article Count:</Form.Label>
-								<Form.Control
-									type='number'
-									onChange={handleCountChange}
-									min='0'
-									max={params.maxCount}
-									value={params.count}
-								/>
-							</Form.Group>
-						</Col>
-						<Col>
-							<Form.Group
-								controlId='f_themes'
-								className='mb-4'>
-								<Form.Label>Theme:</Form.Label>
-								<DropdownButton
-									id='dropdown-themes'
-									title={prepListElement(params.theme)}
-									className='btn-select'
-									menuVariant='dark'
-									drop='down-centered'>
-									{/* maps through themes array for drop down box */}
+		<Stack gap={3}>
+			<Form className='col-8 col-md-6 col-xl-4 mx-auto bg-white p-3 rounded-5 px-5 py-3' style={{ boxShadow: '0px 4px 12px #00000050' }}>
+				<Stack gap={3}>
+					<p className='text-center'>First choose the theme from a drop down list, then enter the article count to be displayed.</p>
+
+					<Stack direction='horizontal' gap={3} className='mx-auto'>
+						<Form.Group controlId='f_count'>
+							<Form.Label>Article Count:</Form.Label>
+							<Form.Control
+								type='number'
+								onChange={handleCountChange}
+								min='0'
+								max={params.maxCount}
+								value={params.count}
+							/>
+						</Form.Group>
+
+						<Form.Group
+							controlId='f_themes'>
+							<Form.Label>Theme:</Form.Label>
+							<DropdownButton id="dropdown-autoclose-true"
+								title={prepListElement(params.theme)}
+								variant='secondary'
+								menuVariant='dark'
+								drop='down-centered'>
+								{/* maps through themes array for drop down box */}
+								<div style={{
+									height: '200px',
+									overflowY: 'scroll',
+								}}>
 									{themes.map((theme, index) => (
 										<Dropdown.Item
 											key={index}
@@ -130,31 +127,35 @@ function SetNewsParams() {
 											{prepListElement(theme)}
 										</Dropdown.Item>
 									))}
-								</DropdownButton>
-							</Form.Group>
-						</Col>
-					</Row>
-					<Row>
-						<Col className='d-flex justify-content-center'>
-							<Button
-								onClick={() => {
-									handleSubmit();
-								}}>
-								Sumbit
-							</Button>
-						</Col>
-					</Row>
-				</Form>
-				{isSubmitted ? (
-					<NewsFetch
-						params={params}
-						handleMaxCountChange={handleMaxCountChange}
-					/>
-				) : (
-					''
-				)}
-			</Col>
-		</Row>
+								</div>
+
+
+
+							</DropdownButton>
+						</Form.Group>
+					</Stack>
+
+					<Form.Group className='mx-auto'>
+						<Button
+							onClick={() => {
+								handleSubmit();
+							}}>
+							Sumbit
+						</Button>
+					</Form.Group>
+
+				</Stack>
+			</Form>
+
+			{isSubmitted ? (
+				<NewsFetch
+					params={params}
+					handleMaxCountChange={handleMaxCountChange}
+				/>
+			) : (
+				''
+			)}
+		</Stack>
 	);
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useRef, useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Stack } from 'react-bootstrap';
 
 const InputForm = ({ setTextToAnalyse }) => {
 	const [textareaInput, setTextareaInput] = useState('');
@@ -32,42 +32,37 @@ const InputForm = ({ setTextToAnalyse }) => {
 	}, [textareaInput]);
 
 	return (
-		<>
-			<div className='user-input-div'>
-				<Form>
-					<Form.Group
-						className='mb-4'
-						controlId='textarea'>
-						<Form.Label className='h1 d-flex justify-content-center'>Enter your Text </Form.Label>
-						<p className='text-center'>
-							Please submit text in the form of single sentences or even entire paragraphs, and sentiment analysis will
-							be performed to determine the conveyed emotion.
-						</p>
-						<Form.Control
-							as='textarea'
-							rows={10}
-							ref={textAreaRef}
-							value={textareaInput}
-							onChange={(e) => setTextareaInput(e.target.value)}
-						/>
-					</Form.Group>
-				</Form>
-				<div className='d-flex justify-content-end'>
-					<Button
-						className='mx-2 btn-reset'
-						onClick={text_area_reset}>
-						Reset
+		<Form className='px-5 py-3 bg-white rounded-5' style={{ boxShadow: '0px 4px 12px #00000050' }}>
+			<Form.Group
+				controlId='textarea'>
+				<Form.Label className='h1 d-flex justify-content-center'>Enter your Text </Form.Label>
+				<p className='text-center'>
+					Please submit text in the form of single sentences or even entire paragraphs, and sentiment analysis will
+					be performed to determine the conveyed emotion.
+				</p>
+				<Form.Control
+					as='textarea'
+					rows={6}
+					ref={textAreaRef}
+					value={textareaInput}
+					onChange={(e) => setTextareaInput(e.target.value)}
+				/>
+			</Form.Group>
+			<Form.Group className='pt-3'>
+				<Stack direction="horizontal" gap={3}>
+					<Button className='ms-auto'
+						onClick={text_area_reset} style={{ background: '#FF000095' }}>
+						<span>Reset</span>
 					</Button>
 					<Button
-						className='mx-2'
 						onClick={() => {
 							text_area_submit();
 						}}>
-						Analyse text
+						<span>Analyse text</span>
 					</Button>
-				</div>
-			</div>
-		</>
+				</Stack>
+			</Form.Group>
+		</Form>
 	);
 };
 

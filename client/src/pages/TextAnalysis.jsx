@@ -1,5 +1,5 @@
 import { Container } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 
 import InputForm from '../components/user-text/InputForm';
 import SentimentAnalysis from '../components/user-text/SentimentAnalysis';
@@ -12,18 +12,10 @@ const TextAnalysis = () => {
 	return (
 		<Container fluid>
 			<h1 className='text-center m-5 mb-3 text-white'>Find the emotion in your text</h1>
-			<>
-				<Row className='mx-5'>
-					<Col className='col-xs-12 col-md-10 col-xl-6 mx-auto'>
-						<InputForm setTextToAnalyse={setTextToAnalyse} />
-					</Col>
-				</Row>
-				<Row className='m-5 text-center'>
-					<Col>
-						<SentimentAnalysis textToAnalyse={textToAnalyse} />
-					</Col>
-				</Row>
-			</>
+			<Stack gap={3} className='col-10 col-xs-10 col-md-8 col-xl-6 mx-auto'>
+				<InputForm setTextToAnalyse={setTextToAnalyse} />
+				<SentimentAnalysis textToAnalyse={textToAnalyse} />
+			</Stack>
 		</Container>
 	);
 };

@@ -32,15 +32,13 @@ const SentimentAnalysis = ({ textToAnalyse }) => {
 	}, [textToAnalyse]);
 
 	return (
-		<div className='col-xs-12 col-md-10 col-xl-6 mx-auto'>
-			{sentimentResponse ? (
-				<>
-					<SentimentOutput sentimentResponse={sentimentResponse} />
-				</>
-			) : (
-				''
-			)}
-		</div>
+		sentimentResponse ? (
+			<>
+				<SentimentOutput sentimentResponse={sentimentResponse} />
+			</>
+		) : (
+			''
+		)
 	);
 };
 

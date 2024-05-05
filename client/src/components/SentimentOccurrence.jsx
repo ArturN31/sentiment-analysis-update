@@ -25,11 +25,10 @@ const SentimentOccurrence = ({ updatedNews }) => {
     }, [updatedNews])
 
     return (
-        <Row className="text-center text-white bg-dark mx-4 rounded-4 pt-4 pb-2">
+        <Row className="text-center text-white bg-dark mx-4 pt-4 pb-2 col-12 col-md-10 col-xl-8 mx-auto" style={{ borderRadius: '23px' }}>
             <p>Sentiment Occurrence:</p>
 
             {Object.keys(sentimentOccurence).map((sentiment, index) => <Col key={index}><p>{sentiment}: {Object.values(sentimentOccurence)[index]}</p></Col>)}
-
         </Row>
     )
 }
