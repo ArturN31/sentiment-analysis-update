@@ -90,35 +90,43 @@ function SetNewsParams() {
 
 	return (
 		<Stack gap={3}>
-			<Form className='col-8 col-md-6 col-xl-4 mx-auto bg-white p-3 rounded-5 px-5 py-3' style={{ boxShadow: '0px 4px 12px #00000050' }}>
+			<Form
+				className='col-8 col-md-6 col-xl-4 mx-auto bg-white p-3 rounded-5 px-5 py-3'
+				style={{ boxShadow: '0px 4px 12px #00000050' }}>
 				<Stack gap={3}>
-					<p className='text-center'>First choose the theme from a drop down list, then enter the article count to be displayed.</p>
+					<p className='text-center'>
+						Choose a theme from the dropdown list and enter the number of articles you want to see.
+					</p>
 
-					<Stack direction='horizontal' gap={3} className='mx-auto'>
+					<Stack
+						direction='horizontal'
+						gap={3}
+						className='mx-auto d-flex flex-wrap justify-content-center'>
 						<Form.Group controlId='f_count'>
 							<Form.Label>Article Count:</Form.Label>
 							<Form.Control
 								type='number'
 								onChange={handleCountChange}
-								min='0'
-								max={params.maxCount}
+								min='1'
+								max={params.maxCount === 1 ? 20 : params.maxCount}
 								value={params.count}
 							/>
 						</Form.Group>
 
-						<Form.Group
-							controlId='f_themes'>
+						<Form.Group controlId='f_themes'>
 							<Form.Label>Theme:</Form.Label>
-							<DropdownButton id="dropdown-autoclose-true"
+							<DropdownButton
+								id='dropdown-autoclose-true'
 								title={prepListElement(params.theme)}
 								variant='secondary'
 								menuVariant='dark'
 								drop='down-centered'>
 								{/* maps through themes array for drop down box */}
-								<div style={{
-									height: '200px',
-									overflowY: 'scroll',
-								}}>
+								<div
+									style={{
+										height: '200px',
+										overflowY: 'scroll',
+									}}>
 									{themes.map((theme, index) => (
 										<Dropdown.Item
 											key={index}
@@ -128,14 +136,13 @@ function SetNewsParams() {
 										</Dropdown.Item>
 									))}
 								</div>
-
-
-
 							</DropdownButton>
 						</Form.Group>
 					</Stack>
 
-					<Form.Group className='mx-auto'>
+					<Form.Group
+						controlId='f_submit'
+						className='mx-auto'>
 						<Button
 							onClick={() => {
 								handleSubmit();
@@ -143,7 +150,6 @@ function SetNewsParams() {
 							Sumbit
 						</Button>
 					</Form.Group>
-
 				</Stack>
 			</Form>
 

@@ -51,6 +51,11 @@ h5 {
 }
 /* EOF ACCORDION */
 
+.react-date-picker__wrapper {
+	border: 0px !important;
+	padding: 0.282rem 0.7rem;
+}
+
 .leaflet-popup-content {
 	width: 600px !important;
 }

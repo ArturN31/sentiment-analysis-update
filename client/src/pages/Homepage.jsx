@@ -6,7 +6,7 @@ const Homepage = () => {
 		return (
 			<Row>
 				<Col className='col-10 col-md-8 mx-auto'>
-					<blockquote className='text-bg-dark rounded p-3 text-break' style={{ textAlign: 'justify' }}>
+					<blockquote className='text-bg-dark rounded-5 px-4 py-3 text-break' style={{ textAlign: 'justify' }}>
 						{quote}
 						{author}
 					</blockquote>

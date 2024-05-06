@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react"
-import { Row, Col } from 'react-bootstrap'
+import { Row, Stack } from 'react-bootstrap'
 
 const SentimentOccurrence = ({ updatedNews }) => {
     const [sentimentOccurence, setSentimentOccurrence] = useState([]);
@@ -28,7 +28,9 @@ const SentimentOccurrence = ({ updatedNews }) => {
         <Row className="text-center text-white bg-dark mx-4 pt-4 pb-2 col-12 col-md-10 col-xl-8 mx-auto" style={{ borderRadius: '23px' }}>
             <p>Sentiment Occurrence:</p>
 
-            {Object.keys(sentimentOccurence).map((sentiment, index) => <Col key={index}><p>{sentiment}: {Object.values(sentimentOccurence)[index]}</p></Col>)}
+            <Stack gap={3} direction='horizontal' className="d-flex flex-wrap justify-content-center">
+                {Object.keys(sentimentOccurence).map((sentiment, index) => <p key={index}>{sentiment}: {Object.values(sentimentOccurence)[index]}</p>)}
+            </Stack>
         </Row>
     )
 }

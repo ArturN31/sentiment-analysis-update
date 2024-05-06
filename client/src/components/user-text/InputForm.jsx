@@ -32,13 +32,14 @@ const InputForm = ({ setTextToAnalyse }) => {
 	}, [textareaInput]);
 
 	return (
-		<Form className='px-5 py-3 bg-white rounded-5' style={{ boxShadow: '0px 4px 12px #00000050' }}>
-			<Form.Group
-				controlId='textarea'>
+		<Form
+			className='px-5 py-3 bg-white rounded-5'
+			style={{ boxShadow: '0px 4px 12px #00000050' }}>
+			<Form.Group controlId='textarea'>
 				<Form.Label className='h1 d-flex justify-content-center'>Enter your Text </Form.Label>
 				<p className='text-center'>
-					Please submit text in the form of single sentences or even entire paragraphs, and sentiment analysis will
-					be performed to determine the conveyed emotion.
+					Paste or type any text, from a single sentence to a whole paragraph. Our sentiment analysis tool will analyse
+					it and tell you the conveyed emotion.
 				</p>
 				<Form.Control
 					as='textarea'
@@ -49,9 +50,13 @@ const InputForm = ({ setTextToAnalyse }) => {
 				/>
 			</Form.Group>
 			<Form.Group className='pt-3'>
-				<Stack direction="horizontal" gap={3}>
-					<Button className='ms-auto'
-						onClick={text_area_reset} style={{ background: '#FF000095' }}>
+				<Stack
+					direction='horizontal'
+					gap={3}>
+					<Button
+						className='ms-auto'
+						onClick={text_area_reset}
+						style={{ background: '#FF000095' }}>
 						<span>Reset</span>
 					</Button>
 					<Button

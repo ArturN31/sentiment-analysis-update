@@ -1,47 +1,40 @@
 /* eslint-disable react/prop-types */
-import { Row, Col, Card, Accordion, ListGroup } from 'react-bootstrap';
+import { Stack, Card, Accordion } from 'react-bootstrap';
 import SentimentOutput from '../SentimentOutput';
 
-const NewsDisplay = (props) => {
-    const { newsData } = props;
+const NewsDisplay = ({ newsData }) => {
     const { headline, pub_date, multimedia, text } = newsData;
 
     return (
-        <Row className='m-3'>
-            <Col>
-                <Accordion flush>
-                    <Accordion.Item eventKey={headline.main}>
-                        <Accordion.Header>
-                            <div>
-                                <h5>{headline.main}</h5>
-                                <p>
-                                    News date: {pub_date.split('T')[0]} - {pub_date.split('T')[1].split('-')[0]}
-                                </p>
-                            </div>
-                        </Accordion.Header>
-                        <Accordion.Body>
-                            <Card>
-                                <Card.Body>
-                                    <ListGroup className='list-group-flush'>
-                                        {multimedia.length > 0 ? (
-                                            <Card.Img style={{ width: '50vw' }} className='mx-auto' src={`https://www.nytimes.com/${multimedia[0].url}`} />
-                                        ) : (
-                                            ''
-                                        )}
-                                        <Card.Body className='text-center'>
-                                            <p>{text}</p>
+        <Accordion flush className='col-12 col-md-10 col-xl-8 mx-auto'>
+            <Accordion.Item eventKey={headline.main}>
+                <Accordion.Header>
+                    <div>
+                        <h5>{headline.main}</h5>
+                        <p>
+                            News date: {pub_date.split('T')[0]} - {pub_date.split('T')[1].split('-')[0]}
+                        </p>
+                    </div>
+                </Accordion.Header>
+                <Accordion.Body>
+                    <Card>
+                        <Card.Body>
+                            <Stack gap={3}>
+                                {multimedia.length > 0 ? (
+                                    <Card.Img style={{ width: '50vw' }} className='mx-auto' src={`https://www.nytimes.com/${multimedia[0].url}`} />
+                                ) : (
+                                    ''
+                                )}
 
-                                            <SentimentOutput sentimentResponse={newsData.sentimentAnalysis} />
+                                <p style={{ textAlign: 'justify' }}>{text}</p>
 
-                                        </Card.Body>
-                                    </ListGroup>
-                                </Card.Body>
-                            </Card>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-            </Col>
-        </Row>
+                                <SentimentOutput sentimentResponse={newsData.sentimentAnalysis} />
+                            </Stack>
+                        </Card.Body>
+                    </Card>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
     );
 };
 

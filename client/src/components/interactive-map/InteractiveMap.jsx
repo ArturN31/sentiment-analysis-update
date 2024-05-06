@@ -58,8 +58,8 @@ const InteractiveMap = ({ news }) => {
 
     return (
         <Row className="d-flex justify-content-center">
-            <Col className="col-12 col-xl-8 col-xxl-6 m-5 bg-dark p-2 rounded-2">
-                {userCoords ? <MapContainer center={userCoords} zoom={2} scrollWheelZoom={true} style={{ height: "50dvh", width: "100%" }}>
+            <Col className="col-12 col-xl-8 col-2xl-6 m-5 bg-dark p-2 rounded-2">
+                {userCoords ? <MapContainer center={userCoords} zoom={2} scrollWheelZoom={true} style={{ height: "50dvh" }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

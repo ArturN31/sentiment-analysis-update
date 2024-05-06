@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import 'leaflet/dist/leaflet.css'
 import { Marker, Popup } from "react-leaflet"
-import { Row, Col, Container } from "react-bootstrap"
+import { Stack, Row, Col } from "react-bootstrap"
 import SentimentOutput from '../SentimentOutput'
 
 const ArticleMarkers = ({ newsWithCoords }) => {
@@ -21,28 +21,20 @@ const ArticleMarkers = ({ newsWithCoords }) => {
     const markers = newsWithCoords && newsWithCoords.map((article, index) => (
         <Marker key={index} position={getArticleCoordinates(article)}>
             <Popup>
-                <Container className='px-1 py-3'>
-                    <div className='mb-2'>
-                        <Row>
-                            <Col>
-                                <h5 className="mb-2 text-center p-2 border rounded bg-body-secondary">{article.headline.main}</h5>
-                            </Col>
-                        </Row>
+                <Stack gap={3} className='py-2'>
+                    <Stack gap={3}>
+                        <h5 className="text-center p-2 border rounded bg-body-secondary m-0">{article.headline.main}</h5>
 
-                        <Row>
-                            <Col>
-                                {article.abstract ? (
-                                    <p className='m-0 text-center p-2 border rounded bg-body-tertiary'>{article.abstract}</p>
-                                ) : ''}
-                            </Col>
-                        </Row>
-                    </div>
+                        {article.abstract ? (
+                            <p className='text-center p-2 border rounded bg-body-tertiary m-0'>{article.abstract}</p>
+                        ) : ''}
+                    </Stack>
 
                     <Row>
                         <Col className='d-flex justify-content-center'>
                             {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
                                 <img
-                                    className='w-100 rounded border object-fit-cover'
+                                    className='w-100 rounded-5 border object-fit-cover'
                                     src={`https://www.nytimes.com/${article.multimedia[0].url}`}
                                     alt={`Image for article: ${article.headline.print_headline}`}
                                 />
@@ -53,7 +45,7 @@ const ArticleMarkers = ({ newsWithCoords }) => {
                             <SentimentOutput sentimentResponse={article.sentimentAnalysis} />
                         </Col>
                     </Row>
-                </Container>
+                </Stack>
             </Popup>
         </Marker>
     ));

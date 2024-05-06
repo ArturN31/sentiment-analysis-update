@@ -143,12 +143,13 @@ const NewsFetch = (params) => {
 		<Stack gap={3} className='my-3'>
 			<p className='text-center'>Total amount of available articles: {news.length}</p>
 
-			<SentimentOccurrence updatedNews={updatedNews} />
+			<p className='text-center'>{error}</p>
+
+			{updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
 
 			{updatedNews.length > 0 ? updatedNews.slice(0, count).map((n) => (
 				<NewsDisplay
 					newsData={n}
-					error={error}
 					key={n.title}
 				/>
 			)) : ''}

@@ -4,7 +4,7 @@ import { Card, Accordion, Stack } from 'react-bootstrap';
 
 import SentimentOutput from '../SentimentOutput';
 
-const NewsDisplay = ({ newsData, error }) => {
+const NewsDisplay = ({ newsData }) => {
 	const { title, published_date, multimedia, text } = newsData;
 
 	return (
@@ -31,8 +31,6 @@ const NewsDisplay = ({ newsData, error }) => {
 								<p style={{ textAlign: 'justify' }}>{text}</p>
 
 								<SentimentOutput sentimentResponse={newsData.sentimentAnalysis} />
-
-								{error ? <p>{error}</p> : ''}
 							</Stack>
 						</Card.Body>
 					</Card>
