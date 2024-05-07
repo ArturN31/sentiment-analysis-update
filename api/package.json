@@ -8,7 +8,7 @@
 		"build": "cd .. && cd client && npm install && npm run build"
 	},
 	"engines": {
-		"node": "21.4.0"
+		"node": "21.x"
 	},
 	"author": "",
 	"license": "ISC",
