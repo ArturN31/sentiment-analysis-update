@@ -257,3 +257,5 @@ app.listen(PORT, (error) => {
 		console.log(`[server]: Server run into a problem:\n[server]: ${error}`);
 	}
 });
+
+module.exports = app;
