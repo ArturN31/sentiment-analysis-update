@@ -119,6 +119,12 @@ const getThresholds = (sentiment) => {
 	return thresholds[sentiment];
 };
 
+app.options('/api/sentimentAnalysis', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.sendStatus(200); // Successful pre-flight response
+});
+
 app.post('/api/sentimentAnalysis', async (req, res) => {
 	const textToTokenize = req.body.text;
 
@@ -135,6 +141,12 @@ app.post('/api/sentimentAnalysis', async (req, res) => {
 	const sentiment = sentimentAnalysis(sentimentScore, textToTokenize);
 
 	res.status(200).send(sentiment); // Send sentiment data as JSON
+});
+
+app.options('/api/getNewsByTheme', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.sendStatus(200); // Successful pre-flight response
 });
 
 app.post('/api/getNewsByTheme', async (req, res) => {
@@ -166,6 +178,12 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 	}
 });
 
+app.options('/api/scrapeArticleData', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.sendStatus(200); // Successful pre-flight response
+});
+
 app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 	//reset stored news text - ensures that updated version is pulled when calling api from client
@@ -193,6 +211,12 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 		console.log(error);
 		res.status(500).end();
 	}
+});
+
+app.options('/api/getNewsByDate', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.sendStatus(200); // Successful pre-flight response
 });
 
 app.post('/api/getNewsByDate', async (req, res) => {
@@ -223,6 +247,12 @@ app.post('/api/getNewsByDate', async (req, res) => {
 		console.log(error);
 		res.status(500).end();
 	}
+});
+
+app.options('/api/getCoordinates', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.sendStatus(200); // Successful pre-flight response
 });
 
 app.post('/api/getCoordinates', async (req, res) => {
