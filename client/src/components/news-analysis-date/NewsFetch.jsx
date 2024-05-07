@@ -18,13 +18,19 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
         const fetchNewsByDate = async () => {
             try {
-                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/getNewsByDate';
+                let url = ''
+                if (import.meta.env.DEV) {
+                    url = 'http://localhost:3001/api/getNewsByDate'
+                } else {
+                    url = 'https://sentiment-analysis-server.vercel.app/api/getNewsByDate'
+                }
+
                 const options = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ month: month, year: year }),
                 };
-                const response = await fetch(apiURL, options);
+                const response = await fetch(url, options);
                 if (!response.ok) throw response;
                 const incomingData = await response.json();
                 setNews(incomingData);
@@ -41,8 +47,14 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
         const fetchScrapedArticleText = async (article) => {
             try {
-                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/scrapeArticleData';
-                const response = await fetch(apiURL, {
+                let url = ''
+                if (import.meta.env.DEV) {
+                    url = 'http://localhost:3001/api/scrapeArticleData'
+                } else {
+                    url = 'https://sentiment-analysis-server.vercel.app/api/scrapeArticleData'
+                }
+
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: article.web_url }),
@@ -67,7 +79,13 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
         const fetchSentimentAnalysis = async (article) => {
             if (article.text) {
                 try {
-                    const url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis';
+                    let url = ''
+                    if (import.meta.env.DEV) {
+                        url = 'http://localhost:3001/api/sentimentAnalysis'
+                    } else {
+                        url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis'
+                    }
+
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

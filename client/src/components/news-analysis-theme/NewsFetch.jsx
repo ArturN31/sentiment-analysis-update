@@ -18,7 +18,13 @@ const NewsFetch = (params) => {
 			return theme;
 		};
 		const getTheme = prepThemeForSubmit();
-		const url = 'https://sentiment-analysis-server.vercel.app/api/getNewsByTheme';
+
+		let url = ''
+		if (import.meta.env.DEV) {
+			url = 'http://localhost:3001/api/getNewsByTheme'
+		} else {
+			url = 'https://sentiment-analysis-server.vercel.app/api/getNewsByTheme'
+		}
 
 		// Checks if response is already stored
 		const storedNewsResponse = sessionStorage.getItem(`${getTheme}-newsResponse`);
@@ -70,8 +76,14 @@ const NewsFetch = (params) => {
 
 		const fetchScrapedArticleText = async (article) => {
 			try {
-				const apiURL = 'https://sentiment-analysis-server.vercel.app/api/scrapeArticleData';
-				const response = await fetch(apiURL, {
+				let url = ''
+				if (import.meta.env.DEV) {
+					url = 'http://localhost:3001/api/scrapeArticleData'
+				} else {
+					url = 'https://sentiment-analysis-server.vercel.app/api/scrapeArticleData'
+				}
+
+				const response = await fetch(url, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ url: article.url }),
@@ -97,7 +109,13 @@ const NewsFetch = (params) => {
 		const fetchSentimentAnalysis = async (article) => {
 			if (article.text) {
 				try {
-					const url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis';
+					let url = ''
+					if (import.meta.env.DEV) {
+						url = 'http://localhost:3001/api/sentimentAnalysis'
+					} else {
+						url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis'
+					}
+
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },

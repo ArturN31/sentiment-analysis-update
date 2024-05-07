@@ -11,7 +11,13 @@ const SentimentAnalysis = ({ textToAnalyse }) => {
 		if (textToAnalyse) {
 			const fetchResponse = async () => {
 				if (textToAnalyse.text) {
-					const url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis';
+					let url = ''
+					if (import.meta.env.DEV) {
+						url = 'http://localhost:3001/api/sentimentAnalysis'
+					} else {
+						url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis'
+					}
+
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },

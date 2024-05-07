@@ -13,13 +13,19 @@ const InteractiveMap = ({ news }) => {
     useEffect(() => {
         const getNewsCoordinates = async (geolocation) => {
             try {
-                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/getCoordinates';
+                let url = ''
+                if (import.meta.env.DEV) {
+                    url = 'http://localhost:3001/api/getCoordinates'
+                } else {
+                    url = 'https://sentiment-analysis-server.vercel.app/api/getCoordinates'
+                }
+
                 const options = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ geolocation }),
                 };
-                const response = await fetch(apiURL, options);
+                const response = await fetch(url, options);
 
                 if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
 

@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 const cors = require('cors');
 app.use(
 	cors({
-		origin: 'https://sentiment-analysis-client.vercel.app',
+		origin: '*',
 	}),
 );
 
@@ -121,7 +121,7 @@ const getThresholds = (sentiment) => {
 
 app.options('/api/sentimentAnalysis', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.sendStatus(200); // Successful pre-flight response
 });
 
@@ -145,7 +145,7 @@ app.post('/api/sentimentAnalysis', async (req, res) => {
 
 app.options('/api/getNewsByTheme', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.sendStatus(200); // Successful pre-flight response
 });
 
@@ -180,7 +180,7 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 
 app.options('/api/scrapeArticleData', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.sendStatus(200); // Successful pre-flight response
 });
 
@@ -215,7 +215,7 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 
 app.options('/api/getNewsByDate', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.sendStatus(200); // Successful pre-flight response
 });
 
@@ -243,7 +243,7 @@ app.post('/api/getNewsByDate', async (req, res) => {
 
 app.options('/api/getCoordinates', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', 'https://sentiment-analysis-client.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.sendStatus(200); // Successful pre-flight response
 });
 
