@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 const cors = require('cors');
 app.use(
 	cors({
-		origin: 'https://sentiment-analysis-client.vercel.app/',
+		origin: 'https://sentiment-analysis-client.vercel.app',
 	}),
 );
 
