@@ -11,7 +11,11 @@ const PORT = process.env.PORT;
 
 //Cors policy setup
 const cors = require('cors');
-app.use(cors());
+app.use(
+	cors({
+		origin: 'https://sentiment-analysis-server.vercel.app/',
+	}),
+);
 
 app.use(express.urlencoded({ extended: false })); //body parser
 app.use(express.json()); //parses incoming json to the req.body
