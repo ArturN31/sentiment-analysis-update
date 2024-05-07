@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css'
 import { Marker, Popup } from "react-leaflet"
 import { Stack, Row, Col } from "react-bootstrap"
 import SentimentOutput from '../SentimentOutput'
+import { Icon } from 'leaflet'
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
 
 const ArticleMarkers = ({ newsWithCoords }) => {
     const usedCoordinates = []; // Array to store used coordinates
@@ -16,10 +18,8 @@ const ArticleMarkers = ({ newsWithCoords }) => {
         return coordinates;
     };
 
-    console.log(newsWithCoords)
-
     const markers = newsWithCoords && newsWithCoords.map((article, index) => (
-        <Marker key={index} position={getArticleCoordinates(article)}>
+        <Marker key={index} position={getArticleCoordinates(article)} icon={new Icon({ iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41] })}>
             <Popup>
                 <Stack gap={3} className='py-2'>
                     <Stack gap={3}>

@@ -1,12 +1,40 @@
 # Updated version of a sentiment analysis project
 
-The project has been updated due to issues with external API providers. This version implements its APIs that perform the following:
+Client:
 
-- Sentiment analysis on provided text.
-- Retrieve URLs of NYTimes Articles based on a provided theme.
-- Scraping news text from NYTimes articles.
+- JavaScript
+- React (web framework)
+- Bootstrap (CSS framework)
+- CSS
+- React Leaflet Map
+- React Date Picker
 
-# System features
+Server:
 
-- Sentiment analysis of user provided text.
-- Sentiment analysis of news retrieved by chosen theme.
+- JavaScript (Node.js)
+- Express (web framework)
+- CORS middleware
+- Natural: Natural language processing library for sentiment analysis
+- Cheerio: Traversing/Manipulating of DOM - scraping article text
+
+# Project Motivation
+
+This project implements its own sentiment analysis and data retrieval functionalities due to limitations with external APIs.
+
+- Eliminates reliance on external APIs for sentiment analysis and data scraping.
+
+# Functionalities
+
+- News Retrieval:
+  - Retrieve URLs of New York Times articles based on a chosen theme.
+  - Retrieve URLs of New York Times articles based on a chosen month and year.
+- Web Scraping:
+  - Scrape the text content from retrieved New York Times articles.
+- Sentiment Analysis:
+  - Analyse the sentiment of user-provided text.
+  - Analyse the sentiment of news articles retrieved based on:
+    - Theme selection.
+    - Month and year selection.
+- Interactive Map:
+  - Display retrieved news articles (by month/year) as pins on a map.
+  - Clicking a pin displays a popup with the article's details.
