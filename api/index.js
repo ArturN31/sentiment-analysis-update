@@ -222,9 +222,6 @@ app.options('/api/getNewsByDate', (req, res) => {
 app.post('/api/getNewsByDate', async (req, res) => {
 	const { month, year } = req.body;
 
-	//reset stored news - ensures that updated version is pulled when calling api from client
-	const newsArray = [];
-
 	try {
 		const NYTimesAPI = `https://api.nytimes.com/svc/archive/v1/${year}/${month}.json?api-key=`;
 		const response = await fetch(NYTimesAPI + process.env.NY_TIMES_API);
@@ -233,16 +230,11 @@ app.post('/api/getNewsByDate', async (req, res) => {
 
 		const incomingData = await response.json();
 
-		for (let i = 0; i < incomingData.response.docs.length; i++) {
-			if (!incomingData.response.docs[i].web_url || incomingData.response.docs[i].web_url === 'null') {
-				//returns articles with no urls
-				//console.log(incomingData.results[i]);
-			} else {
-				//returns articles with urls
-				newsArray.push(incomingData.response.docs[i]);
-			}
-		}
-		res.status(200).send(JSON.stringify(newsArray));
+		const filteredArticles = incomingData.response.docs.filter(
+			(article) => article.web_url && article.web_url !== 'null',
+		);
+
+		res.status(200).send(JSON.stringify(filteredArticles.slice(0, 200)));
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();
