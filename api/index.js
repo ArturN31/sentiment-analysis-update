@@ -246,9 +246,9 @@ app.post('/api/getCoordinates', async (req, res) => {
 });
 
 //will return build of React app
-app.get('/', (req, res) => {
-	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
-});
+// app.get('/', (req, res) => {
+// 	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+// });
 
 app.listen(PORT, (error) => {
 	if (!error) {

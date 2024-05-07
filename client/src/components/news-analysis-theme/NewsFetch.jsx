@@ -18,7 +18,7 @@ const NewsFetch = (params) => {
 			return theme;
 		};
 		const getTheme = prepThemeForSubmit();
-		const url = 'http://localhost:3001/api/getNewsByTheme';
+		const url = 'https://sentiment-analysis-update.vercel.app/api/getNewsByTheme';
 
 		// Checks if response is already stored
 		const storedNewsResponse = sessionStorage.getItem(`${getTheme}-newsResponse`);
@@ -70,7 +70,7 @@ const NewsFetch = (params) => {
 
 		const fetchScrapedArticleText = async (article) => {
 			try {
-				const apiURL = 'http://localhost:3001/api/scrapeArticleData';
+				const apiURL = 'https://sentiment-analysis-update.vercel.app/api/scrapeArticleData';
 				const response = await fetch(apiURL, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ const NewsFetch = (params) => {
 		const fetchSentimentAnalysis = async (article) => {
 			if (article.text) {
 				try {
-					const url = 'http://localhost:3001/api/sentimentAnalysis';
+					const url = 'https://sentiment-analysis-update.vercel.app/api/sentimentAnalysis';
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
