@@ -13,7 +13,7 @@ const InteractiveMap = ({ news }) => {
     useEffect(() => {
         const getNewsCoordinates = async (geolocation) => {
             try {
-                const apiURL = 'https://sentiment-analysis-update.vercel.app/api/getCoordinates';
+                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/getCoordinates';
                 const options = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

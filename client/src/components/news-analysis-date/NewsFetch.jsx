@@ -18,7 +18,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
         const fetchNewsByDate = async () => {
             try {
-                const apiURL = 'https://sentiment-analysis-update.vercel.app/api/getNewsByDate';
+                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/getNewsByDate';
                 const options = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
         const fetchScrapedArticleText = async (article) => {
             try {
-                const apiURL = 'https://sentiment-analysis-update.vercel.app/api/scrapeArticleData';
+                const apiURL = 'https://sentiment-analysis-server.vercel.app/api/scrapeArticleData';
                 const response = await fetch(apiURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -67,7 +67,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
         const fetchSentimentAnalysis = async (article) => {
             if (article.text) {
                 try {
-                    const url = 'https://sentiment-analysis-update.vercel.app/api/sentimentAnalysis';
+                    const url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis';
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

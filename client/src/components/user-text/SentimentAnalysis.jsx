@@ -11,7 +11,7 @@ const SentimentAnalysis = ({ textToAnalyse }) => {
 		if (textToAnalyse) {
 			const fetchResponse = async () => {
 				if (textToAnalyse.text) {
-					const url = 'https://sentiment-analysis-update.vercel.app/api/sentimentAnalysis';
+					const url = 'https://sentiment-analysis-server.vercel.app/api/sentimentAnalysis';
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
