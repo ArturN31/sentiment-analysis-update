@@ -43,7 +43,7 @@ function SetNewsParams() {
 	return (
 		<Stack gap={3}>
 			<Form
-				className='col-8 col-md-6 col-xl-4 mx-auto bg-white p-3 rounded-5 px-5 py-3'
+				className='col-8 col-md-6 col-xl-4 mx-auto bg-white rounded p-4'
 				style={{ boxShadow: '0px 4px 12px #00000050' }}>
 				<Stack gap={3}>
 					<p className='text-center'>

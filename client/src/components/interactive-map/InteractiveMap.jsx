@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap"
+import { Stack } from "react-bootstrap"
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import ArticleMarkers from "./ArticleMarkers";
@@ -63,18 +63,16 @@ const InteractiveMap = ({ news }) => {
     }, [])
 
     return (
-        <Row className="d-flex justify-content-center">
-            <Col className="col-12 col-xl-8 col-2xl-6 m-5 bg-dark p-2 rounded-2">
-                {userCoords ? <MapContainer center={userCoords} zoom={2} scrollWheelZoom={true} style={{ height: "50dvh" }}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+        <Stack className="mx-auto user-select-none col-12 col-md-10 col-2xl-6">
+            {userCoords ? <MapContainer center={userCoords} zoom={2} scrollWheelZoom={true} style={{ height: "75dvh" }}>
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-                    <ArticleMarkers newsWithCoords={newsWithCoords} />
-                </MapContainer> : ''}
-            </Col>
-        </Row>
+                <ArticleMarkers newsWithCoords={newsWithCoords} />
+            </MapContainer> : ''}
+        </Stack>
     )
 }
 

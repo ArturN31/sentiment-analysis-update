@@ -33,7 +33,7 @@ const InputForm = ({ setTextToAnalyse }) => {
 
 	return (
 		<Form
-			className='px-5 py-3 bg-white rounded-5'
+			className='px-4 pb-4 pt-2 bg-white rounded'
 			style={{ boxShadow: '0px 4px 12px #00000050' }}>
 			<Form.Group controlId='textarea'>
 				<Form.Label className='h1 d-flex justify-content-center'>Enter your Text </Form.Label>

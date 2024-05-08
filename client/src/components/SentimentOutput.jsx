@@ -7,19 +7,19 @@ const SentimentOutput = ({ sentimentResponse }) => {
 	const [style, setStyle] = useState({});
 
 	const sentimentStyles = new Map([
-		['very positive', 'linear-gradient(45deg, #ffcc00, #ff3300)'],
-		['positive', 'linear-gradient(45deg, #66cc33, #ffcc00)'],
-		['slightly positive', 'linear-gradient(45deg, #99ff99, #66cc33)'],
-		['neutral', 'linear-gradient(45deg, #cccccc, #999999)'],
-		['slightly negative', 'linear-gradient(45deg, #ffcc99, #ff9933)'],
-		['negative', 'linear-gradient(45deg, #ff6666, #cc0000)'],
-		['very negative', 'linear-gradient(45deg, #990000, #660000)'],
-		['undefined', 'none'], // Default style for undefined sentiment
+		['very positive', { background: 'linear-gradient(45deg, #ffcc00, #ff3300)', color: '#000' }],
+		['positive', { background: 'linear-gradient(45deg, #66cc33, #ffcc00)', color: '#000' }],
+		['slightly positive', { background: 'linear-gradient(45deg, #99ff99, #66cc33)', color: '#000' }],
+		['neutral', { background: 'linear-gradient(45deg, #cccccc, #999999)', color: '#000' }],
+		['slightly negative', { background: 'linear-gradient(45deg, #ffcc99, #ff9933)', color: '#fff' }],
+		['negative', { background: 'linear-gradient(45deg, #ff6666, #cc0000)', color: '#fff' }],
+		['very negative', { background: 'linear-gradient(45deg, #990000, #660000)', color: '#fff' }],
+		['undefined', 'none'],
 	]);
 
 	const sentimentStyling = () => {
-		const backgroundStyle = sentimentStyles.get(sentiment) || 'none';
-		setStyle({ background: backgroundStyle });
+		const backgroundStyle = sentimentStyles.get(sentiment) || {};
+		setStyle(backgroundStyle);
 	};
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const SentimentOutput = ({ sentimentResponse }) => {
 	}, []);
 
 	return sentimentResponse.sentiment ? (
-		<div style={style} className='p-5 rounded-5'>
+		<div style={style} className='p-3 rounded'>
 			<SentimentCard description={description} sentiment={sentiment} />
 		</div>
 	) : (

@@ -158,10 +158,10 @@ const NewsFetch = (params) => {
 	}, [news]);
 
 	return (
-		<Stack gap={3} className='my-3'>
-			<p className='text-center'>Total amount of available articles: {news.length}</p>
+		<Stack gap={3} className='mb-3'>
+			{news.length > 0 ? <p className='text-center m-0'>Total amount of available articles: {news.length}</p> : ''}
 
-			<p className='text-center'>{error}</p>
+			{error ? <p className='text-center m-0'>{error}</p> : ''}
 
 			{updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
 

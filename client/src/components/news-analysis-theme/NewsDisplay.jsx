@@ -4,6 +4,8 @@ import { Card, Accordion, Stack } from 'react-bootstrap';
 
 import SentimentOutput from '../SentimentOutput';
 
+
+
 const NewsDisplay = ({ newsData }) => {
 	const { title, published_date, multimedia, text } = newsData;
 
@@ -13,7 +15,7 @@ const NewsDisplay = ({ newsData }) => {
 				<Accordion.Header>
 					<div>
 						<h5>{title}</h5>
-						<p>
+						<p className='m-0'>
 							News date: {published_date.split('T')[0]} - {published_date.split('T')[1].split('-')[0]}
 						</p>
 					</div>

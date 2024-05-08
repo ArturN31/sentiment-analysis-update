@@ -25,16 +25,20 @@ const ArticleMarkers = ({ newsWithCoords }) => {
                     <Stack gap={3}>
                         <h5 className="text-center p-2 border rounded bg-body-secondary m-0">{article.headline.main}</h5>
 
+                        <p className='text-center p-2 border rounded bg-body-tertiary m-0'>
+                            News date: {article.pub_date.split('T')[0]} - {article.pub_date.split('T')[1].split('-')[0].split('+')[0]}
+                        </p>
+
                         {article.abstract ? (
                             <p className='text-center p-2 border rounded bg-body-tertiary m-0'>{article.abstract}</p>
                         ) : ''}
                     </Stack>
 
-                    <Row>
+                    <Row id='marker-img-sentiment-row'>
                         <Col className='d-flex justify-content-center'>
                             {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
                                 <img
-                                    className='w-100 rounded-5 border object-fit-cover'
+                                    className='w-100 rounded border object-fit-cover'
                                     src={`https://www.nytimes.com/${article.multimedia[0].url}`}
                                     alt={`Image for article: ${article.headline.print_headline}`}
                                 />

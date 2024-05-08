@@ -4,7 +4,7 @@ import SetNewsParams from '../components/news-analysis-date/SetNewsParams'
 function InteractiveMap() {
     return (
         <Container fluid>
-            <h1 className='text-center m-5 mb-3 text-white'>Interactive Map</h1>
+            <h1 className='text-center m-5 mb-3 text-white'>News Analysis by Date on Interactive Map</h1>
             <SetNewsParams />
         </Container>
     );

@@ -153,13 +153,14 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
     }, [news]);
 
     return (
-        <Stack gap={3} className='my-3'>
-            <span className='text-center'>Total amount of available articles: {news.length}</span>
+        <Stack gap={3} className='mb-3'>
+            {news.length > 0 ? <p className='text-center m-0'>Total amount of available articles: {news.length}</p> : ''}
 
-            <p className='text-center'>{error}</p>
+            {error ? <p className='text-center'>{error}</p> : ''}
 
             {updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
 
+            {/* Displayed only on the News Analysis by Date page */}
             {currentPage === 'NewsAnalysisDate' && updatedNews.length > 0
                 ? updatedNews.slice(0, count).map((n) => (
                     <NewsDisplay
@@ -169,6 +170,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
                 ))
                 : ''}
 
+            {/* Displayed only on the Interactive Map page */}
             {currentPage === 'InteractiveMap' && updatedNews.length > 0 ? <InteractiveMap news={updatedNews} /> : ''}
         </Stack>
     );

@@ -11,8 +11,8 @@ const NewsDisplay = ({ newsData }) => {
                 <Accordion.Header>
                     <div>
                         <h5>{headline.main}</h5>
-                        <p>
-                            News date: {pub_date.split('T')[0]} - {pub_date.split('T')[1].split('-')[0]}
+                        <p className='m-0'>
+                            News date: {pub_date.split('T')[0]} - {pub_date.split('T')[1].split('-')[0].split('+')[0]}
                         </p>
                     </div>
                 </Accordion.Header>

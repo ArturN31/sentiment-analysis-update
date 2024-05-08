@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap';
 const NewsAnalysisTheme = () => {
 	return (
 		<Container fluid>
-			<h1 className='text-center m-5 mb-3 text-white'>Analysis by theme</h1>
+			<h1 className='text-center m-5 mb-3 text-white'>News Analysis by Theme</h1>
 			<SetNewsParams />
 		</Container>
 	);

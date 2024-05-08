@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Row, Col } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 
 const SentimentCard = ({ sentiment, description }) => {
 	const prepTitle = () => {
@@ -20,14 +20,12 @@ const SentimentCard = ({ sentiment, description }) => {
 	};
 
 	return (
-		<Row>
-			<Col className='text-center'>
-				<h1>{prepTitle()}</h1>
-				{description.map((paragraph, index) => (
-					<p key={index}>{paragraph}</p>
-				))}
-			</Col>
-		</Row>
+		<Stack gap={3} className='text-center'>
+			<h1 className='m-0'>{prepTitle()}</h1>
+			{description.map((paragraph, index) => (
+				<p className='m-0' key={index}>{paragraph}</p>
+			))}
+		</Stack>
 	);
 };
 
