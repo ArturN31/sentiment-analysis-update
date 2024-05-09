@@ -23,15 +23,40 @@ app.use(express.json()); //parses incoming json to the req.body
 // Have Node serve the files for built React app
 app.use(express.static(path.resolve(__dirname, '../client/dist')));
 
-var Analyzer = require('natural').SentimentAnalyzer;
-var stemmer = require('natural').PorterStemmer;
-var analyzer = new Analyzer('English', stemmer, 'afinn');
+// Require the Natural library for sentiment analysis
+const natural = require('natural');
 
-var natural = require('natural');
-var tokenizer = new natural.WordTokenizer();
+// Define aliases for commonly used classes from Natural
+const Analyzer = natural.SentimentAnalyzer;
+const stemmer = natural.PorterStemmer;
+
+// Create a sentiment analyzer instance using English language, Porter stemmer, and Senticon lexicon
+const analyzer = new Analyzer('English', stemmer, 'senticon');
+
+// Create a word tokenizer instance for splitting text into words
+const tokenizer = new natural.WordTokenizer();
+
+// Require the VaderSentiment library for additional sentiment analysis
+const vaderSentiment = require('vader-sentiment');
+
+// Function to retrieve the lower and upper score thresholds for a given sentiment category
+const categoriseSentiment = (sentiment) => {
+	// Object containing the score thresholds for each sentiment category
+	const sentimentCategories = {
+		'very positive': { lowerThreshold: 0.75, upperThreshold: 1 },
+		positive: { lowerThreshold: 0.5, upperThreshold: 0.75 },
+		'slightly positive': { lowerThreshold: 0.3, upperThreshold: 0.5 },
+		neutral: { lowerThreshold: -0.1, upperThreshold: 0.3 },
+		'slightly negative': { lowerThreshold: -0.5, upperThreshold: -0.1 },
+		negative: { lowerThreshold: -0.8, upperThreshold: -0.5 },
+		'very negative': { lowerThreshold: -1, upperThreshold: -0.8 },
+	};
+
+	return sentimentCategories[sentiment];
+};
 
 // Function to perform sentiment analysis based on a given score
-const sentimentAnalysis = (score, textToTokenize) => {
+const sentimentAnalysis = (score) => {
 	// Object containing sentiment categories and their associated data
 	const sentimentData = {
 		'very positive': {
@@ -73,22 +98,20 @@ const sentimentAnalysis = (score, textToTokenize) => {
 
 	// Iterate over sentimentData to find the appropriate sentiment category based on the score
 	for (const sentiment in sentimentData) {
-		const { lowerThreshold, upperThreshold } = getThresholds(sentiment);
+		const { lowerThreshold, upperThreshold } = categoriseSentiment(sentiment);
 
-		if (score > lowerThreshold && score <= upperThreshold) {
+		if (score >= lowerThreshold && score <= upperThreshold) {
 			// Return the sentiment analysis result
 			return {
 				sentiment,
 				description: [
 					`The analysed text reflects a ${sentiment.toLowerCase()} sentiment with a score of ${score.toFixed(2)}.`,
 					`It elicits emotions of ${sentimentData[sentiment].emotion.join(', ')}.`,
-					`The positivity level is categorised as ${sentimentData[sentiment].positivityLevel}, indicating ${
-						sentimentData[sentiment].intensity === 'neutral'
-							? 'an absence of strong positive or negative emotions'
-							: `a ${sentimentData[sentiment].intensity.toLowerCase()} impact of the text`
+					`The positivity level is categorised as ${sentimentData[sentiment].positivityLevel}, indicating ${sentimentData[sentiment].intensity === 'neutral'
+						? 'an absence of strong positive or negative emotions'
+						: `a ${sentimentData[sentiment].intensity.toLowerCase()} impact of the text`
 					}.`,
 				],
-				analysedText: textToTokenize,
 			};
 		}
 	}
@@ -101,22 +124,6 @@ const sentimentAnalysis = (score, textToTokenize) => {
 			'Please check the input and try again.',
 		],
 	};
-};
-
-// Function to retrieve the lower and upper score thresholds for a given sentiment category
-const getThresholds = (sentiment) => {
-	// Object containing the score thresholds for each sentiment category
-	const thresholds = {
-		'very positive': { lowerThreshold: 0.8, upperThreshold: 1 },
-		positive: { lowerThreshold: 0.4, upperThreshold: 0.8 },
-		'slightly positive': { lowerThreshold: 0.1, upperThreshold: 0.4 },
-		neutral: { lowerThreshold: -0.1, upperThreshold: 0.1 },
-		'slightly negative': { lowerThreshold: -0.4, upperThreshold: -0.1 },
-		negative: { lowerThreshold: -0.8, upperThreshold: -0.4 },
-		'very negative': { lowerThreshold: -1, upperThreshold: -0.8 },
-	};
-
-	return thresholds[sentiment];
 };
 
 app.options('/api/sentimentAnalysis', (req, res) => {
@@ -136,9 +143,20 @@ app.post('/api/sentimentAnalysis', async (req, res) => {
 		return;
 	}
 
+	// Tokenize the text (split into words)
 	const tokenizedText = tokenizer.tokenize(textToTokenize);
-	const sentimentScore = analyzer.getSentiment(tokenizedText);
-	const sentiment = sentimentAnalysis(sentimentScore, textToTokenize);
+
+	// Get sentiment score using the natural language analyzer
+	const naturalSentimentScore = analyzer.getSentiment(tokenizedText);
+
+	// Get sentiment scores using VaderSentiment
+	const vaderSentimentScores = vaderSentiment.SentimentIntensityAnalyzer.polarity_scores(textToTokenize);
+
+	// Combine the scores from natural and VaderSentiment
+	const combinedScore = (naturalSentimentScore + vaderSentimentScores.compound) / 2;
+
+	// Perform further analysis based on combined score
+	const sentiment = sentimentAnalysis(combinedScore);
 
 	res.status(200).send(sentiment); // Send sentiment data as JSON
 });
