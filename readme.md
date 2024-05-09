@@ -7,7 +7,7 @@ Client:
 - Bootstrap (CSS framework)
 - CSS
 - React Leaflet Map
-- React Date Picker
+- React DatePicker
 
 Server:
 

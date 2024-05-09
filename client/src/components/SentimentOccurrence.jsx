@@ -25,7 +25,7 @@ const SentimentOccurrence = ({ updatedNews }) => {
     }, [updatedNews])
 
     return (
-        <Stack gap={1} className="text-center text-white bg-dark p-3 col-12 col-md-10 col-xl-8 mx-auto rounded">
+        <Stack gap={1} className="text-center text-white bg-dark p-3 col-12 col-md-10 col-xl-8 mx-auto rounded shadow-sm">
             <p className="m-0">Sentiment Occurrence:</p>
 
             <Stack gap={3} direction='horizontal' className="d-flex flex-wrap justify-content-center">

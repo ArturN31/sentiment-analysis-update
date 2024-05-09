@@ -49,11 +49,26 @@ h5 {
 .accordion-button {
 	border-radius: 0.375rem !important;
 }
+
+.accordion-item {
+	border: none !important;
+}
+
+.accordion-body {
+	border: 2px solid black;
+	border-radius: 0.375rem !important;
+	border-top: 1px !important;
+}
 /* EOF ACCORDION */
 
-.react-date-picker__wrapper {
-	border: 0px !important;
-	padding: 0.282rem 0.7rem;
+input {
+	text-align: center;
+}
+
+.react-datepicker__input-container > #f_date {
+	padding: 0.375rem 0.7rem;
+	border: 1px solid #dee2e6;
+	border-radius: 0.375rem;
 }
 
 .leaflet-container {
@@ -65,9 +80,8 @@ h5 {
 	border-radius: 0.375rem !important;
 }
 
-#marker-img-sentiment-row {
-	display: grid;
-	gap: 1rem;
+.leaflet-popup-close-button {
+	font-size: x-large !important;
 }
 
 /* Small Screens (portrait phones, less than 576px) */
@@ -81,11 +95,6 @@ h5 {
 @media (min-width: 800px) {
 	.leaflet-popup-content {
 		width: 500px !important;
-	}
-
-	#marker-img-sentiment-row {
-		display: flex;
-		gap: 0px;
 	}
 }
 

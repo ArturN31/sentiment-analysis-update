@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import 'leaflet/dist/leaflet.css'
 import { Marker, Popup } from "react-leaflet"
-import { Stack, Row, Col } from "react-bootstrap"
-import SentimentOutput from '../SentimentOutput'
 import { Icon } from 'leaflet'
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import { Stack, Row, Col, Image } from "react-bootstrap"
+import SentimentOutput from '../SentimentOutput'
 
 const ArticleMarkers = ({ newsWithCoords }) => {
     const usedCoordinates = []; // Array to store used coordinates
@@ -21,31 +21,32 @@ const ArticleMarkers = ({ newsWithCoords }) => {
     const markers = newsWithCoords && newsWithCoords.map((article, index) => (
         <Marker key={index} position={getArticleCoordinates(article)} icon={new Icon({ iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41] })}>
             <Popup>
-                <Stack gap={3} className='py-2'>
-                    <Stack gap={3}>
-                        <h5 className="text-center p-2 border rounded bg-body-secondary m-0">{article.headline.main}</h5>
+                <Stack gap={1} className='py-2'>
+                    <Stack gap={1}>
+                        <h5 className="text-center p-2 bg-body-secondary m-0 border border-5 border-dark rounded">{article.headline.main}</h5>
 
-                        <p className='text-center p-2 border rounded bg-body-tertiary m-0'>
-                            News date: {article.pub_date.split('T')[0]} - {article.pub_date.split('T')[1].split('-')[0].split('+')[0]}
+                        <p className='text-center p-2 bg-body-tertiary m-0 border border-5 border-dark rounded'>
+                            Article release date: {article.pub_date.split('T')[0]} - {article.pub_date.split('T')[1].split('-')[0].split('+')[0]}
                         </p>
 
                         {article.abstract ? (
-                            <p className='text-center p-2 border rounded bg-body-tertiary m-0'>{article.abstract}</p>
+                            <p className='text-center p-2 bg-body-tertiary m-0 border border-5 border-dark rounded'>{article.abstract}</p>
                         ) : ''}
                     </Stack>
 
-                    <Row id='marker-img-sentiment-row'>
-                        <Col className='d-flex justify-content-center'>
+                    <Row className='d-flex flex-wrap justify-content-center gap-1'>
+                        <Col className='col-12 col-lg-5 d-grid justify-content-center rounded'>
                             {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
-                                <img
-                                    className='w-100 rounded border object-fit-cover'
+                                <Image
+                                    fluid
+                                    className='border border-dark border-5 rounded shadow-sm h-100 object-fit-cover'
                                     src={`https://www.nytimes.com/${article.multimedia[0].url}`}
                                     alt={`Image for article: ${article.headline.print_headline}`}
                                 />
                             ) : ''}
                         </Col>
 
-                        <Col className='d-flex m-auto'>
+                        <Col className='rounded col-12 col-lg-5 d-grid justify-content-center'>
                             <SentimentOutput sentimentResponse={article.sentimentAnalysis} />
                         </Col>
                     </Row>
@@ -55,7 +56,6 @@ const ArticleMarkers = ({ newsWithCoords }) => {
     ));
 
     return markers;
-
 }
 
 export default ArticleMarkers;

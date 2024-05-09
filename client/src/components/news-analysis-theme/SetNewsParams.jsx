@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Form, DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import { Stack, Form, Button } from 'react-bootstrap';
 import NewsFetch from './NewsFetch';
 
 const themes = [
@@ -103,7 +103,7 @@ function SetNewsParams() {
 						gap={3}
 						className='mx-auto d-flex flex-wrap justify-content-center'>
 						<Form.Group controlId='f_count'>
-							<Form.Label>Article Count:</Form.Label>
+							<Form.Label className='d-flex justify-content-center'>Article Count:</Form.Label>
 							<Form.Control
 								type='number'
 								onChange={handleCountChange}
@@ -113,35 +113,25 @@ function SetNewsParams() {
 							/>
 						</Form.Group>
 
-						<Form.Group controlId='f_themes'>
-							<Form.Label>Theme:</Form.Label>
-							<DropdownButton
-								id='dropdown-autoclose-true'
+						<Form.Group controlId='f_theme'>
+							<Form.Label className='d-flex justify-content-center'>Theme:</Form.Label>
+							<Form.Select
 								title={prepListElement(params.theme)}
-								variant='secondary'
-								menuVariant='dark'
-								drop='down-centered'>
+							>
 								{/* maps through themes array for drop down box */}
-								<div
-									style={{
-										height: '200px',
-										overflowY: 'scroll',
-									}}>
-									{themes.map((theme, index) => (
-										<Dropdown.Item
-											key={index}
-											onClick={() => handleDropdownSelection(theme)}
-											className='text-center'>
-											{prepListElement(theme)}
-										</Dropdown.Item>
-									))}
-								</div>
-							</DropdownButton>
+								{themes.map((theme, index) => (
+									<option
+										key={index}
+										onClick={() => handleDropdownSelection(theme)}
+										className='text-center'>
+										{prepListElement(theme)}
+									</option>
+								))}
+							</Form.Select>
 						</Form.Group>
 					</Stack>
 
 					<Form.Group
-						controlId='f_submit'
 						className='mx-auto'>
 						<Button
 							onClick={() => {
@@ -151,17 +141,19 @@ function SetNewsParams() {
 						</Button>
 					</Form.Group>
 				</Stack>
-			</Form>
+			</Form >
 
-			{isSubmitted ? (
-				<NewsFetch
-					params={params}
-					handleMaxCountChange={handleMaxCountChange}
-				/>
-			) : (
-				''
-			)}
-		</Stack>
+			{
+				isSubmitted ? (
+					<NewsFetch
+						params={params}
+						handleMaxCountChange={handleMaxCountChange}
+					/>
+				) : (
+					''
+				)
+			}
+		</Stack >
 	);
 }
 

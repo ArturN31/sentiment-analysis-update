@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Stack, Form, Button } from 'react-bootstrap';
 
 import NewsFetch from './NewsFetch';
-import DatePicker from 'react-date-picker';
+import DatePicker from 'react-datepicker';
+
 
 function SetNewsParams() {
 	const [params, setParams] = useState({
-		year: 2023,
+		year: 2024,
 		month: 1,
 		count: 1,
 		maxCount: 1,
@@ -17,6 +18,7 @@ function SetNewsParams() {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	const handleDateChange = (date) => {
+		setDate(date);
 		setParams({ ...params, year: date.getFullYear(), month: date.getMonth() + 1 });
 		setIsSubmitted(false);
 	};
@@ -29,11 +31,6 @@ function SetNewsParams() {
 	// sets params for count
 	const handleMaxCountChange = (passedMaxCount) => {
 		setParams({ ...params, maxCount: passedMaxCount });
-	};
-
-	const handleDatePicker = (date) => {
-		setDate(date);
-		handleDateChange(date);
 	};
 
 	const handleSubmit = () => {
@@ -54,8 +51,7 @@ function SetNewsParams() {
 						direction='horizontal'
 						gap={3}
 						className='mx-auto d-flex flex-wrap justify-content-center'>
-						<Form.Group
-							controlId='f_count'
+						<Form.Group controlId='f_count'
 							className='d-grid justify-content-center'>
 							<Form.Label className='text-center'>Article Count:</Form.Label>
 							<Form.Control
@@ -67,23 +63,21 @@ function SetNewsParams() {
 							/>
 						</Form.Group>
 
-						<Form.Group
-							controlId='f_date'
-							className='d-grid justify-content-center'>
+						<Form.Group controlId='f_date' className='d-grid justify-content-center'>
 							<Form.Label className='text-center'>Article Date:</Form.Label>
 							<DatePicker
-								onChange={handleDatePicker}
-								value={date}
-								maxDetail='year'
+								id='f_date'
+								selected={date}
+								onChange={(date) => { handleDateChange(date) }}
+								dateFormat="MM/yyyy"
 								minDate={new Date('01-01-1852')}
 								maxDate={new Date()}
-								className='mx-auto border rounded-2'
+								showMonthYearPicker
 							/>
 						</Form.Group>
 					</Stack>
 
 					<Form.Group
-						controlId='f_submit'
 						className='d-grid justify-content-center'>
 						<Button
 							className='mx-auto'

@@ -35,8 +35,8 @@ const InputForm = ({ setTextToAnalyse }) => {
 		<Form
 			className='px-4 pb-4 pt-2 bg-white rounded'
 			style={{ boxShadow: '0px 4px 12px #00000050' }}>
-			<Form.Group controlId='textarea'>
-				<Form.Label className='h1 d-flex justify-content-center'>Enter your Text </Form.Label>
+			<Form.Group controlId='f_textarea'>
+				<h2 className='h1 d-flex justify-content-center'>Enter your Text </h2>
 				<p className='text-center'>
 					Paste or type any text, from a single sentence to a whole paragraph. Our sentiment analysis tool will analyse
 					it and tell you the conveyed emotion.

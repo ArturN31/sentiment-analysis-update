@@ -20,7 +20,7 @@ const SentimentCard = ({ sentiment, description }) => {
 	};
 
 	return (
-		<Stack gap={3} className='text-center'>
+		<Stack gap={1} className='text-center'>
 			<h1 className='m-0'>{prepTitle()}</h1>
 			{description.map((paragraph, index) => (
 				<p className='m-0' key={index}>{paragraph}</p>

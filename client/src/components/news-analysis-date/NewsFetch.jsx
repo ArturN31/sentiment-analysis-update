@@ -154,7 +154,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
     return (
         <Stack gap={3} className='mb-3'>
-            {news.length > 0 ? <p className='text-center m-0'>Total amount of available articles: {news.length}</p> : ''}
+            {news.length > 0 ? <p className='text-center m-0'>Available articles: {news.length}</p> : ''}
 
             {error ? <p className='text-center'>{error}</p> : ''}
 
