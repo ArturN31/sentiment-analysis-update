@@ -4,19 +4,25 @@ import { Stack } from 'react-bootstrap';
 const SentimentCard = ({ sentiment, description }) => {
 	const prepTitle = () => {
 		let title = '';
-		if (sentiment.split(' ')) {
-			const isMoreThanOneWord = sentiment.split(' ');
 
-			if (isMoreThanOneWord.length === 2) {
-				const firstWord = isMoreThanOneWord[0].substr(0, 1).toUpperCase() + isMoreThanOneWord[0].slice(1);
-				const secondWord = isMoreThanOneWord[1].substr(0, 1).toUpperCase() + isMoreThanOneWord[1].slice(1);
+		//if the sentiment string contains any words (separated by spaces)
+		if (sentiment.split(' ')) {
+			const words = sentiment.split(' '); //split the sentiment string into an array of words
+
+			//if there are two words in the sentiment
+			if (words.length === 2) {
+				//capitalise the first letter of the first and second word
+				const firstWord = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+				const secondWord = words[1].charAt(0).toUpperCase() + words[1].slice(1);
+
 				title = firstWord + ' ' + secondWord;
 			} else {
-				title = sentiment.substr(0, 1).toUpperCase() + sentiment.slice(1);
+				//if there's only one word
+				//capitalise the first letter and store it in the title
+				title = sentiment.charAt(0).toUpperCase() + sentiment.slice(1);
 			}
-
-			return title;
 		}
+		return title;
 	};
 
 	return (

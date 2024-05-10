@@ -1,9 +1,16 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
-
 import logo from './logo.svg';
 
 const Navigation = () => {
+	const navigationLinks = [
+		{ link: '/', text: 'Home' },
+		{ link: '/TextAnalysis', text: 'Text Analysis' },
+		{ link: '/NewsAnalysisTheme', text: 'News Analysis by Theme' },
+		{ link: '/NewsAnalysisDate', text: 'News Analysis by Date' },
+		{ link: '/InteractiveMap', text: 'Interactive Map' },
+	];
+
 	return (
 		<>
 			<Navbar expand='lg'>
@@ -11,54 +18,24 @@ const Navigation = () => {
 					<img
 						src={logo}
 						alt='React Bootstrap logo'
-						className='mx-5'
+						className='mx-3'
 					/>
 				</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls='navbarScroll'
-					className='mx-5'
+					className='mx-2'
 				/>
 				<Navbar.Collapse
 					id='navbarScroll'
 					className='justify-content-end'>
-					<Nav
-						navbarScroll
-						className='mx-5'>
-						<Nav.Item>
-							<NavLink
-								to='/'
-								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								Home
-							</NavLink>
-						</Nav.Item>
-						<Nav.Item>
-							<NavLink
-								to='/TextAnalysis'
-								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								Text Analysis
-							</NavLink>
-						</Nav.Item>
-						<Nav.Item>
-							<NavLink
-								to='/NewsAnalysisTheme'
-								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								News Analysis by Theme
-							</NavLink>
-						</Nav.Item>
-						<Nav.Item>
-							<NavLink
-								to='/NewsAnalysisDate'
-								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								News Analysis by Date
-							</NavLink>
-						</Nav.Item>
-						<Nav.Item>
-							<NavLink
-								to='/InteractiveMap'
-								className={(navData) => (navData.isActive ? 'nav-link active-link' : 'nav-link')}>
-								Interactive Map
-							</NavLink>
-						</Nav.Item>
+					<Nav navbarScroll className='d-flex gap-1 gap-lg-2 gap-lg-4 align-items-end mx-3'>
+						{navigationLinks.map((page, index) => (
+							<Nav.Item key={index}>
+								<NavLink to={page.link} className={(navData) => (navData.isActive ? 'text-decoration-none text-black fw-semibold ' : 'text-decoration-none text-white')}>
+									{page.text}
+								</NavLink>
+							</Nav.Item>
+						))}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

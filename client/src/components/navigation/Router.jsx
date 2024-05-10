@@ -8,39 +8,23 @@ import InteractiveMap from '../../pages/InteractiveMap';
 import NoMatch from '../../pages/NoMatch';
 import Navigation from './Navigation';
 
-//Simple header of the page
 const Router = () => {
+	const routing = [
+		{ path: '/', element: <Homepage /> },
+		{ path: '/TextAnalysis', element: <TextAnalysis /> },
+		{ path: '/NewsAnalysisTheme', element: <NewsAnalysisByTheme /> },
+		{ path: '/NewsAnalysisDate', element: <NewsAnalysisByDate /> },
+		{ path: '/InteractiveMap', element: <InteractiveMap /> },
+		{ path: '*', element: <NoMatch /> }, //catch-all for non-existent routes
+	];
+
 	return (
 		<BrowserRouter>
+			<Navigation />
 			<Routes>
-				<Route
-					path='/'
-					element={<Navigation />}>
-					<Route
-						path='/'
-						element={<Homepage />}
-					/>{' '}
-					<Route
-						path='/TextAnalysis'
-						element={<TextAnalysis />}
-					/>{' '}
-					<Route
-						path='/NewsAnalysisTheme'
-						element={<NewsAnalysisByTheme />}
-					/>{' '}
-					<Route
-						path='/NewsAnalysisDate'
-						element={<NewsAnalysisByDate />}
-					/>{' '}
-					<Route
-						path='/InteractiveMap'
-						element={<InteractiveMap />}
-					/>{' '}
-					<Route
-						path='*'
-						element={<NoMatch />}
-					/>{' '}
-				</Route>
+				{routing.map((route) => (
+					<Route key={route.path} {...route} />
+				))}
 			</Routes>
 		</BrowserRouter>
 	);

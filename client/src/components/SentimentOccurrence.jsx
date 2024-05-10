@@ -11,7 +11,6 @@ const SentimentOccurrence = ({ updatedNews }) => {
                 acc[sentiment] = (acc[sentiment] || 0) + 1;
                 return acc;
             }, {});
-
             return sentimentCounts;
         }
 
@@ -26,7 +25,7 @@ const SentimentOccurrence = ({ updatedNews }) => {
         handleSentimentOccurence();
     }, [updatedNews]);
 
-    // Define the desired order of sentiment categories
+    //desired order of sentiment categories
     const sentimentOrder = [
         'very positive',
         'positive',

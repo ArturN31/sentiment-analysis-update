@@ -14,7 +14,9 @@ const TextAnalysis = () => {
 			<h1 className='text-center m-5 mb-3 text-white'>Text Analysis</h1>
 			<Stack gap={3} className='col-10 col-xs-10 col-md-8 col-xl-6 col-xxl-4 mx-auto'>
 				<InputForm setTextToAnalyse={setTextToAnalyse} />
-				<SentimentAnalysis textToAnalyse={textToAnalyse} />
+				<div className='mb-3'>
+					<SentimentAnalysis textToAnalyse={textToAnalyse} />
+				</div>
 			</Stack>
 		</Container>
 	);

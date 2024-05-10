@@ -52,9 +52,9 @@ const InputForm = ({ setTextToAnalyse }) => {
 			<Form.Group className='pt-3'>
 				<Stack
 					direction='horizontal'
-					gap={3}>
+					gap={3}
+					className='d-flex flex-wrap gap-3 justify-content-center'>
 					<Button
-						className='ms-auto'
 						onClick={text_area_reset}
 						style={{ background: '#FF000095' }}>
 						<span>Reset</span>
