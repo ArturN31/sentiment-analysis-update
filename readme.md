@@ -44,7 +44,7 @@ This application empowers users to delve into the world of news with a unique bl
 
 **Unmasking the Hidden Text:**
 
-\*Harnessing the Power of APIs: Our app leverages a publicly available API to retrieve URLs for news articles from the New York Times. This ensures we focus on content authorised for access. Once we have the URLs, the app helps you explore the sentiment within the articles text.
+- Harnessing the Power of APIs: Our app leverages a publicly available API to retrieve URLs for news articles from the New York Times. This ensures we focus on content authorised for access. Once we have the URLs, the app helps you explore the sentiment within the articles text.
 
 **Mapping the World of News:**
 
