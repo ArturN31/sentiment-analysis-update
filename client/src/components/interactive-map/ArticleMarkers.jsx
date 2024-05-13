@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css'
 import { Marker, Popup } from "react-leaflet"
 import { Icon } from 'leaflet'
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
-import { Stack, Row, Col, Image } from "react-bootstrap"
+import { Stack, Image } from "react-bootstrap"
 import SentimentOutput from '../SentimentOutput'
 
 const ArticleMarkers = ({ newsWithCoords }) => {
@@ -32,24 +32,18 @@ const ArticleMarkers = ({ newsWithCoords }) => {
                         {article.abstract ? (
                             <p className='text-center p-2 bg-body-tertiary m-0 border border-5 border-dark rounded'>{article.abstract}</p>
                         ) : ''}
+
+                        {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
+                            <Image
+                                fluid
+                                className='border border-dark border-5 rounded shadow-sm h-100 object-fit-cover'
+                                src={`https://www.nytimes.com/${article.multimedia[0].url}`}
+                                alt={`Image for article: ${article.headline.print_headline}`}
+                            />
+                        ) : ''}
+
+                        <SentimentOutput sentimentResponse={article.sentimentAnalysis} />
                     </Stack>
-
-                    <Row className='d-flex flex-wrap justify-content-center gap-1'>
-                        <Col className='col-12 col-lg-5 d-grid justify-content-center rounded'>
-                            {article.multimedia && article.multimedia.length > 0 && article.multimedia[0].url ? (
-                                <Image
-                                    fluid
-                                    className='border border-dark border-5 rounded shadow-sm h-100 object-fit-cover'
-                                    src={`https://www.nytimes.com/${article.multimedia[0].url}`}
-                                    alt={`Image for article: ${article.headline.print_headline}`}
-                                />
-                            ) : ''}
-                        </Col>
-
-                        <Col className='rounded col-12 col-lg-5 d-grid justify-content-center'>
-                            <SentimentOutput sentimentResponse={article.sentimentAnalysis} />
-                        </Col>
-                    </Row>
                 </Stack>
             </Popup>
         </Marker>

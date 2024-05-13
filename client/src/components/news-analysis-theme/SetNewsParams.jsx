@@ -115,15 +115,10 @@ function SetNewsParams() {
 
 						<Form.Group controlId='f_theme'>
 							<Form.Label className='d-flex justify-content-center'>Theme:</Form.Label>
-							<Form.Select
-								title={prepListElement(params.theme)}
-							>
-								{/* maps through themes array for drop down box */}
+							<Form.Select title={prepListElement(params.theme)} onChange={(e) => handleDropdownSelection(e.target.value)}>
+								{/* Maps through themes array for dropdown options */}
 								{themes.map((theme, index) => (
-									<option
-										key={index}
-										onClick={() => handleDropdownSelection(theme)}
-										className='text-center'>
+									<option key={index} value={theme} className='text-center'>
 										{prepListElement(theme)}
 									</option>
 								))}

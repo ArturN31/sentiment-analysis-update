@@ -1,5 +1,4 @@
 import { Container } from 'react-bootstrap';
-
 import SetNewsParams from '../components/news-analysis-date/SetNewsParams';
 
 const NewsAnalysisByDate = () => {

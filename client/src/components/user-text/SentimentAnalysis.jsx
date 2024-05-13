@@ -21,7 +21,7 @@ const SentimentAnalysis = ({ textToAnalyse }) => {
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(textToAnalyse),
+						body: JSON.stringify({ ...textToAnalyse, purpose: 'user' }),
 					}).catch((error) => console.error(error));
 
 					if (!response.ok) {

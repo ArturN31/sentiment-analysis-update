@@ -119,7 +119,7 @@ const NewsFetch = (params) => {
 					const response = await fetch(url, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ text: article.text }),
+						body: JSON.stringify({ text: article.text, purpose: 'news' }),
 					});
 
 					if (!response.ok) {

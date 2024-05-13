@@ -1,15 +1,12 @@
-const path = require('path');
+//setup express app
 const express = require('express');
+const app = express();
+
+//loads .env
 const dotenv = require('dotenv');
 dotenv.config();
 
-//used to scrape article data
-const cheerio = require('cheerio');
-
-const app = express();
-const PORT = process.env.PORT;
-
-//Cors policy setup
+//CORS policy setup
 const cors = require('cors');
 app.use(
 	cors({
@@ -20,112 +17,6 @@ app.use(
 app.use(express.urlencoded({ extended: false })); //body parser
 app.use(express.json()); //parses incoming json to the req.body
 
-// Have Node serve the files for built React app
-app.use(express.static(path.resolve(__dirname, '../client/dist')));
-
-// Require the Natural library for sentiment analysis
-const natural = require('natural');
-
-// Define aliases for commonly used classes from Natural
-const Analyzer = natural.SentimentAnalyzer;
-const stemmer = natural.PorterStemmer;
-
-// Create a sentiment analyzer instance using English language, Porter stemmer, and Senticon lexicon
-const analyzer = new Analyzer('English', stemmer, 'senticon');
-
-// Create a word tokenizer instance for splitting text into words
-const tokenizer = new natural.WordTokenizer();
-
-// Require the VaderSentiment library for additional sentiment analysis
-const vaderSentiment = require('vader-sentiment');
-
-// Function to retrieve the lower and upper score thresholds for a given sentiment category
-const categoriseSentiment = (sentiment) => {
-	// Object containing the score thresholds for each sentiment category
-	const sentimentCategories = {
-		'very positive': { lowerThreshold: 0.75, upperThreshold: 1 },
-		positive: { lowerThreshold: 0.5, upperThreshold: 0.75 },
-		'slightly positive': { lowerThreshold: 0.3, upperThreshold: 0.5 },
-		neutral: { lowerThreshold: -0.1, upperThreshold: 0.3 },
-		'slightly negative': { lowerThreshold: -0.5, upperThreshold: -0.1 },
-		negative: { lowerThreshold: -0.8, upperThreshold: -0.5 },
-		'very negative': { lowerThreshold: -1, upperThreshold: -0.8 },
-	};
-
-	return sentimentCategories[sentiment];
-};
-
-// Function to perform sentiment analysis based on a given score
-const sentimentAnalysis = (score) => {
-	// Object containing sentiment categories and their associated data
-	const sentimentData = {
-		'very positive': {
-			emotion: ['elation', 'exhilaration', 'delight', 'enthusiasm', 'gratitude'],
-			positivityLevel: 'high',
-			intensity: 'strong',
-		},
-		positive: {
-			emotion: ['happiness', 'contentment', 'optimism', 'satisfaction', 'hope'],
-			positivityLevel: 'moderate',
-			intensity: 'moderate',
-		},
-		'slightly positive': {
-			emotion: ['pleasure', 'interest', 'cheerfulness', 'amusement', 'relief'],
-			positivityLevel: 'low',
-			intensity: 'mild',
-		},
-		neutral: {
-			emotion: ['equanimity', 'objectivity', 'detachment', 'calmness', 'acceptance'],
-			positivityLevel: 'neutral',
-			intensity: 'neutral',
-		},
-		'slightly negative': {
-			emotion: ['disappointment', 'worry', 'pessimism', 'concern', 'doubt'],
-			positivityLevel: 'low',
-			intensity: 'mild',
-		},
-		negative: {
-			emotion: ['sadness', 'frustration', 'anger', 'regret', 'resentment'],
-			positivityLevel: 'moderate',
-			intensity: 'negative',
-		},
-		'very negative': {
-			emotion: ['despair', 'grief', 'rage', 'helplessness', 'bitterness'],
-			positivityLevel: 'low',
-			intensity: 'strong',
-		},
-	};
-
-	// Iterate over sentimentData to find the appropriate sentiment category based on the score
-	for (const sentiment in sentimentData) {
-		const { lowerThreshold, upperThreshold } = categoriseSentiment(sentiment);
-
-		if (score >= lowerThreshold && score <= upperThreshold) {
-			// Return the sentiment analysis result
-			return {
-				sentiment,
-				description: [
-					`The analysed text reflects a ${sentiment.toLowerCase()} sentiment with a score of ${score.toFixed(2)}.`,
-					`It elicits emotions of ${sentimentData[sentiment].emotion.join(', ')}.`,
-					`The positivity level is categorised as ${sentimentData[sentiment].positivityLevel}, indicating ${sentimentData[sentiment].intensity === 'neutral'
-						? 'an absence of strong positive or negative emotions'
-						: `a ${sentimentData[sentiment].intensity.toLowerCase()} impact of the text`
-					}.`,
-				],
-			};
-		}
-	}
-
-	// Sentiment cannot be determined
-	return {
-		sentiment: 'Unknown',
-		description: [
-			'The sentiment of the analyzed text could not be determined.',
-			'Please check the input and try again.',
-		],
-	};
-};
-
 app.options('/api/sentimentAnalysis', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -134,6 +25,25 @@ app.options('/api/sentimentAnalysis', (req, res) => {
 
 app.post('/api/sentimentAnalysis', async (req, res) => {
 	const textToTokenize = req.body.text;
+	const purpose = req.body.purpose
+
+	//require the Natural library for sentiment analysis
+	const natural = require('natural');
+
+	//require the VaderSentiment library for additional sentiment analysis
+	const vaderSentiment = require('vader-sentiment');
+
+	const { categoriseSentiment } = require('./sentimentAnalysis');
+
+	//define aliases for commonly used classes from Natural
+	const Analyzer = natural.SentimentAnalyzer;
+	const stemmer = natural.PorterStemmer;
+
+	//create a sentiment analyzer instance using English language, Porter stemmer, and Senticon lexicon
+	const analyzer = new Analyzer('English', stemmer, 'senticon');
+
+	//create a word tokenizer instance for splitting text into words
+	const tokenizer = new natural.WordTokenizer();
 
 	if (textToTokenize === '') {
 		const response = {
@@ -143,22 +53,22 @@ app.post('/api/sentimentAnalysis', async (req, res) => {
 		return;
 	}
 
-	// Tokenize the text (split into words)
+	//tokenize the text (split into words)
 	const tokenizedText = tokenizer.tokenize(textToTokenize);
 
-	// Get sentiment score using the natural language analyzer
+	//get sentiment score using the natural language analyzer
 	const naturalSentimentScore = analyzer.getSentiment(tokenizedText);
 
-	// Get sentiment scores using VaderSentiment
+	//get sentiment scores using VaderSentiment
 	const vaderSentimentScores = vaderSentiment.SentimentIntensityAnalyzer.polarity_scores(textToTokenize);
 
-	// Combine the scores from natural and VaderSentiment
+	//combine the scores from natural and VaderSentiment
 	const combinedScore = (naturalSentimentScore + vaderSentimentScores.compound) / 2;
 
-	// Perform further analysis based on combined score
-	const sentiment = sentimentAnalysis(combinedScore);
+	//perform sentiment categorisation based on combined score
+	const sentiment = categoriseSentiment(naturalSentimentScore, vaderSentimentScores.compound, combinedScore, purpose);
 
-	res.status(200).send(sentiment); // Send sentiment data as JSON
+	res.status(200).send(JSON.stringify(sentiment)); // Send sentiment data as JSON
 });
 
 app.options('/api/getNewsByTheme', (req, res) => {
@@ -169,6 +79,7 @@ app.options('/api/getNewsByTheme', (req, res) => {
 
 app.post('/api/getNewsByTheme', async (req, res) => {
 	const theme = req.body.theme;
+
 	//reset stored news - ensures that updated version is pulled when calling api from client
 	const newsArray = [];
 
@@ -196,41 +107,6 @@ app.post('/api/getNewsByTheme', async (req, res) => {
 	}
 });
 
-app.options('/api/scrapeArticleData', (req, res) => {
-	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.sendStatus(200); // Successful pre-flight response
-});
-
-app.post('/api/scrapeArticleData', async (req, res) => {
-	const articleURL = req.body.url;
-	//reset stored news text - ensures that updated version is pulled when calling api from client
-	let scrapedArticleData = {};
-	try {
-		const response = await fetch(articleURL);
-
-		if (!response.ok) throw response;
-
-		const data = await response.text();
-
-		if (!data.includes('geo.captcha-delivery.com')) {
-			//scrape article text
-			const $ = cheerio.load(data);
-			const getArticle = $('article');
-			scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
-		} else {
-			scrapedArticleData = {
-				error:
-					'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
-			};
-		}
-		res.status(200).send(await scrapedArticleData);
-	} catch (error) {
-		console.log(error);
-		res.status(500).end();
-	}
-});
-
 app.options('/api/getNewsByDate', (req, res) => {
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -253,6 +129,46 @@ app.post('/api/getNewsByDate', async (req, res) => {
 		);
 
 		res.status(200).send(JSON.stringify(filteredArticles.slice(0, 200)));
+	} catch (error) {
+		console.log(error);
+		res.status(500).end();
+	}
+});
+
+app.options('/api/scrapeArticleData', (req, res) => {
+	res.setHeader('Access-Control-Allow-Methods', 'POST');
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.sendStatus(200); // Successful pre-flight response
+});
+
+app.post('/api/scrapeArticleData', async (req, res) => {
+	const articleURL = req.body.url;
+
+	//used to scrape article data
+	const cheerio = require('cheerio');
+
+	//reset stored news text - ensures that updated version is pulled when calling api from client
+	let scrapedArticleData = {};
+
+	try {
+		const response = await fetch(articleURL);
+
+		if (!response.ok) throw response;
+
+		const data = await response.text();
+
+		if (!data.includes('geo.captcha-delivery.com')) {
+			//scrape article text
+			const $ = cheerio.load(data);
+			const getArticle = $('article');
+			scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
+		} else {
+			scrapedArticleData = {
+				error:
+					'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
+			};
+		}
+		res.status(200).send(await scrapedArticleData);
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();
@@ -289,10 +205,8 @@ app.post('/api/getCoordinates', async (req, res) => {
 	}
 });
 
-//will return build of React app
-// app.get('/', (req, res) => {
-// 	res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
-// });
+//retrieve port from .env
+const PORT = process.env.PORT;
 
 app.listen(PORT, (error) => {
 	if (!error) {

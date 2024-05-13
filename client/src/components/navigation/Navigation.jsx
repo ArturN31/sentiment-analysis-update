@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
-import logo from './logo.svg';
+import NYTimesAPILogo from '../../assets/poweredby_nytimes_200c.png'
 
 const Navigation = () => {
 	const navigationLinks = [
@@ -15,11 +15,9 @@ const Navigation = () => {
 		<>
 			<Navbar expand='lg'>
 				<Navbar.Brand>
-					<img
-						src={logo}
-						alt='React Bootstrap logo'
-						className='mx-3'
-					/>
+					<a href='https://developer.nytimes.com/' target='_blank'>
+						<img src={NYTimesAPILogo} />
+					</a>
 				</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls='navbarScroll'
