@@ -145,29 +145,26 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 
 	//used to scrape article data
+	const puppeteer = require('puppeteer');
 	const cheerio = require('cheerio');
 
 	//reset stored news text - ensures that updated version is pulled when calling api from client
 	let scrapedArticleData = {};
 
 	try {
-		const response = await fetch(articleURL);
+		//accessing the article content through puppeteer
+		const browser = await puppeteer.launch();
+		const page = await browser.newPage();
+		await page.goto(articleURL);
+		const content = await page.content();
 
-		if (!response.ok) throw response;
+		//retrieving the content with cheerio
+		const $ = cheerio.load(content);
+		const getArticle = $('article');
+		scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
 
-		const data = await response.text();
+		await browser.close();
 
-		if (!data.includes('geo.captcha-delivery.com')) {
-			//scrape article text
-			const $ = cheerio.load(data);
-			const getArticle = $('article');
-			scrapedArticleData = { text: getArticle.find('section').find('p.css-at9mc1').contents().text() };
-		} else {
-			scrapedArticleData = {
-				error:
-					'Unfortunately, due to a captcha blocking access, the article text cannot be retrieved. This prevents the system from obtaining the necessary news data for processing.',
-			};
-		}
 		res.status(200).send(await scrapedArticleData);
 	} catch (error) {
 		console.log(error);

@@ -9,7 +9,6 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
     const { month, year, count } = params;
     const [news, setNews] = useState([]);
     const [updatedNews, setUpdatedNews] = useState([]);
-    const [error, setError] = useState();
 
     const [currentPage, setCurrentPage] = useState('');
 
@@ -68,8 +67,6 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
                 if (data.text) {
                     return { ...article, text: data.text };
-                } else if (data.error) {
-                    setError(data.error);
                 }
             } catch (error) {
                 console.error(error);
@@ -109,14 +106,6 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
                 articles.map(async (article) => {
                     try {
                         const updatedArticleWithText = await fetchScrapedArticleText(article);
-
-                        if (updatedArticleWithText === undefined) {
-                            setError(
-                                "Looks like some articles are missing details. Let's try searching for a wider range of articles.",
-                            );
-                            return;
-                        }
-
                         const updatedArticleWithSentiment = await fetchSentimentAnalysis(updatedArticleWithText);
                         return updatedArticleWithSentiment;
                     } catch (error) {
@@ -143,9 +132,6 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
 
             const articlesToScrapeTextFor = filteredNews.slice(0, count);
             const updatedNews = await fetchNewsData(articlesToScrapeTextFor);
-
-            if (updatedNews.length > 0) setError('');
-
             setUpdatedNews(updatedNews);
         };
         updateNews();
@@ -155,8 +141,6 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
     return (
         <Stack gap={3} className='mb-3'>
             {news.length > 0 ? <p className='text-center m-0'>Available articles: {news.length}</p> : ''}
-
-            {error ? <p className='text-center'>{error}</p> : ''}
 
             {updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
 
