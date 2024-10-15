@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "cd .. && cd client && npm install && npm run build"
+		"build": "cd .. && cd client && npm install && npm run build && npx playwright install"
 	},
 	"engines": {
 		"node": "20.x"
