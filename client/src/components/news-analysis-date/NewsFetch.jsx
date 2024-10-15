@@ -142,7 +142,14 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
         <Stack gap={3} className='mb-3'>
             {news.length > 0 ? <p className='text-center m-0'>Available articles: {news.length}</p> : ''}
 
-            {updatedNews.length > 0 ? <SentimentOccurrence updatedNews={updatedNews} /> : ''}
+            {updatedNews.length > 0
+                ? <SentimentOccurrence updatedNews={updatedNews} />
+                : <div className="text-center text-break col-10 col-md-8 col-xl-6 mx-auto">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="ms-2 my-auto">Retrieving and processing articles...</p>
+                </div>}
 
             {/* Displayed only on the News Analysis by Date page */}
             {currentPage === 'NewsAnalysisDate' && updatedNews.length > 0

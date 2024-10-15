@@ -159,8 +159,7 @@ const NewsFetch = (params) => {
 
 			{updatedNews.length > 0
 				? <SentimentOccurrence updatedNews={updatedNews} />
-				:
-				<div className="text-center text-break col-10 col-md-8 col-xl-6 mx-auto">
+				: <div className="text-center text-break col-10 col-md-8 col-xl-6 mx-auto">
 					<div className="spinner-border text-primary" role="status">
 						<span className="visually-hidden">Loading...</span>
 					</div>
