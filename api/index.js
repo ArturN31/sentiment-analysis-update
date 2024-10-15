@@ -153,7 +153,7 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 
 	try {
 		//accessing the article content through puppeteer
-		const browser = await playwright.webkit.launch();
+		const browser = await playwright.chromium.launch({ headless: true });
 		const context = await browser.newContext();
 		const page = await context.newPage();
 		await page.goto(articleURL);
