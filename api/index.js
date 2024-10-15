@@ -145,21 +145,15 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 
 	//used to scrape article data
-	const chromium = require("@sparticuz/chromium");
-	const playwright = require("playwright-core");
-	const executablePath = await chromium.executablePath();
+	const { chromium } = require("playwright-core");
 	const cheerio = require('cheerio');
 
 	//reset stored news text - ensures that updated version is pulled when calling api from client
 	let scrapedArticleData = {};
 
 	try {
-		//accessing the article content through puppeteer
-		const browser = await playwright.chromium.launch({
-			executablePath,
-			headless: true,
-			args: chromium.args
-		});
+		//accessing the article content through playwright
+		const browser = await chromium.launch();
 		const context = await browser.newContext();
 		const page = await context.newPage();
 		await page.goto(articleURL);
