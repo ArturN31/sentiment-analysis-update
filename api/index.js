@@ -145,7 +145,7 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 
 	//used to scrape article data
-	const puppeteer = require('puppeteer');
+	const playwright = require('playwright');
 	const cheerio = require('cheerio');
 
 	//reset stored news text - ensures that updated version is pulled when calling api from client
@@ -153,8 +153,9 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 
 	try {
 		//accessing the article content through puppeteer
-		const browser = await puppeteer.launch();
-		const page = await browser.newPage();
+		const browser = await playwright.webkit.launch();
+		const context = await browser.newContext();
+		const page = await context.newPage();
 		await page.goto(articleURL);
 		const content = await page.content();
 
