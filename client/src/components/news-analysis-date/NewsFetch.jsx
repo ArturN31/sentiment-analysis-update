@@ -149,6 +149,7 @@ const NewsFetch = ({ params, handleMaxCountChange }) => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                     <p className="ms-2 my-auto">Retrieving and processing articles...</p>
+                    {import.meta.env.DEV ? '' : <p className="ms-2 my-auto">This feature works only in development environment.</p>}
                 </div>}
 
             {/* Displayed only on the News Analysis by Date page */}
