@@ -145,7 +145,7 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 	const articleURL = req.body.url;
 
 	//used to scrape article data
-	const { chromium } = require("playwright-core");
+	const playwright = require("playwright");
 	const cheerio = require('cheerio');
 
 	//reset stored news text - ensures that updated version is pulled when calling api from client
@@ -153,10 +153,11 @@ app.post('/api/scrapeArticleData', async (req, res) => {
 
 	try {
 		//accessing the article content through playwright
-		const browser = await chromium.launch();
+		const browser = await playwright.chromium.launch();
 		const context = await browser.newContext();
 		const page = await context.newPage();
 		await page.goto(articleURL);
+		await page.waitForTimeout(1000);
 		const content = await page.content();
 
 		//retrieving the content with cheerio
